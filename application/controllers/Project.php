@@ -17,5 +17,6 @@ class Project extends CI_Controller
     {
         $this->load->view('project/add_project');
         $this->load->view('template/footer');
+        //test
     }
 }
