@@ -20,12 +20,6 @@ class Common extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function list_project()
-    {
-        $this->load->view('project/list_project');
-        $this->load->view('template/footer');
-    }
-
     public function form2()
     {
         $this->load->view('forms2');

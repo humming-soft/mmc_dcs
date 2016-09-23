@@ -59,12 +59,12 @@
                         </a>
                     </li>
                     <li class="">
-                        <a href="<?php echo base_url('common/form2') ?>">
+                        <a href="<?php echo base_url('journal/list_journal') ?>">
                             <span class="nav-label">Journals</span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="<?php echo base_url('test/form4') ?>">
+                        <a href="<?php echo base_url('dataentry/add_data') ?>">
                             <span class="nav-label">Data Entry</span>
                         </a>
                     </li>
