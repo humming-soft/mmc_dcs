@@ -103,11 +103,24 @@ class Common_model extends CI_Model
      * date:13/09/2016
      * Parameter:none
      * Return type:
-     * Description: function to log login attempt in db
+     * Description: This function is extract data from csv or excel file and write it to db
      */
     public function log_login_attempt($data)
     {
         return $this->db->insert('users_log', $data);
+    }
+
+    /**
+     * @jane
+     * date:23/09/2016
+     * Parameter:none
+     * Return type:
+     * Description: function to log login attempt in db
+     */
+    public function parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date)
+    {
+        $sql = "INSERT INTO tbl_safety_incident(viaduct_master_id, incident_date, incident_desc,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$viaduct_master_id','$incident_date','$incident_desc','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
     }
 
     /**
