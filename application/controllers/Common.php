@@ -19,13 +19,6 @@ class Common extends CI_Controller
         $this->load->view('template/dashboard');
         $this->load->view('template/footer');
     }
-
-    public function list_project()
-    {
-        $this->load->view('project/list_project');
-        $this->load->view('template/footer');
-    }
-
     public function form2()
     {
         $this->load->view('forms2');
@@ -139,5 +132,17 @@ public function validation_submit()
 public function form4()
 {
     $this->load->view('forms');
-}	
+}
+ function get_label($objid)
+    {
+        $this->db->where('sec_obj_id', $objid);
+        $query = $this->db->get('sec_object');
+        $rows = $query->result();
+        $label='';
+        foreach ($rows as $row):
+            $label=$row->sec_obj_desc;
+        endforeach;
+        return $label;
+    }
+
 }

@@ -47,26 +47,26 @@
 <h4 class="m-t-3 text-uppercase">Add New Project</h4>
 <div class="row">
     <div class="col-lg-6">
-        <form class="form-horizontal">
+        <form class="form-horizontal" action="<?php echo base_url();?>project/addNewProject" method="post">
             <div class="form-group">
                 <label for="project_name" class="col-sm-3 control-label">Project Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="project_name">
+                    <input type="text" class="form-control" id="project_name" name="strProjectName">
                 </div>
             </div>
             <div class="form-group">
                 <label for="from_datepicker" class="col-sm-3 control-label">From</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="daterange-singe-date-picker" id="from_datepicker">
+                    <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
                 </div>
             </div>
             <div class="form-group">
                 <label for="to_datepicker" class="col-sm-3 control-label">To</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="daterange-singe-date-picker" id="to_datepicker">
+                    <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
                 </div>
             </div>
-            <button type="button" class="btn btn-primary">Submit</button>
+            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
         </form>
         <!--<form class="form-horizontal">
             <div class="form-group">
@@ -103,6 +103,32 @@
 
 <script>
     $(document).ready(function() {
+       /* $("#submit").click(function(){
+            var name = $("#name").val();
+            var email = $("#email").val();
+            var password = $("#password").val();
+            var contact = $("#contact").val();
+// Returns successful data submission message when the entered information is stored in database.
+            var dataString = 'name1='+ name + '&email1='+ email + '&password1='+ password + '&contact1='+ contact;
+            if(name==''||email==''||password==''||contact=='')
+            {
+                alert("Please Fill All Fields");
+            }
+            else
+            {
+// AJAX Code To Submit Form.
+                $.ajax({
+                    type: "POST",
+                    url: "ajaxsubmit.php",
+                    data: dataString,
+                    cache: false,
+                    success: function(result){
+                        alert(result);
+                    }
+                });
+            }
+            return false;
+        });*/
     });
     $('#from_datepicker').daterangepicker({
         singleDatePicker: true,

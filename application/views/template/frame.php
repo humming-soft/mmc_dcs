@@ -54,7 +54,7 @@
                 </a>
                 <ul>
                     <li class="" id="subProject">
-                        <a href="<?php echo base_url('common/list_project') ?>">
+                        <a href="<?php echo base_url('project/list_project') ?>">
                             <span class="nav-label">Project</span>
                         </a>
                     </li>
