@@ -11,6 +11,7 @@ class Dataentry extends CI_Controller
         $this->load->model('common_model');
         $this->load->view("template/header");
         $this->load->view('template/frame');
+        $this->load->library('excel');
         date_default_timezone_set('Asia/Calcutta'); // to set the time zone
     }
 
@@ -34,9 +35,31 @@ class Dataentry extends CI_Controller
      * Return type:
      * Description: This function is extract data from csv or excel file and write it to db
      */
-    public function parse_data()
+   public function parse_data()
     {
         if (isset($_POST["submit"])) {
+            $file = $_FILES['file']['tmp_name'];
+            $objPHPExcel = PHPExcel_IOFactory::load($file);
+            $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+            $r=$objPHPExcel->getActiveSheet()->getHighestRow();
+            $c=$objPHPExcel->getActiveSheet()->getHighestColumn();
+            print_r($cell_collection);
+            foreach ($cell_collection as $cell) {
+                $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+                $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+                $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+                if(empty($data_value)){
+                    echo "---";
+                }else{
+                    echo "<br>";
+                    echo $data_value;
+                    echo "<br>";
+                }
+            }
+            exit;
+        }
+    }
+        /*if (isset($_POST["submit"])) {
             $file = $_FILES['file']['tmp_name'];
             $handle = fopen($file, "r");
             $c = 0;
@@ -60,6 +83,5 @@ class Dataentry extends CI_Controller
                 exit;
             }
 
-        }
-    }
+        }*/
 }

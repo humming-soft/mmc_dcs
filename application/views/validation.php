@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-horizontal">
-                            <?php echo form_open('common/validation_submit' , array('id' => 'validations'));?>
+                           <?php echo form_open('common/addProject' , array('id' => 'validations'));?>
                             <div class="form-group">
                                 <label for="name1" class="col-sm-3 control-label">Name</label>
                                 <div class="col-sm-9">
@@ -83,7 +83,7 @@
                                <button type="submit" class="btn btn-block m-b-2 btn-primary" name="insert" id="insert">Insert</button>
                            </div>
                        </div>
-                       <?php echo form_close();?>   
+                      <?php echo form_close();?>
                    </div>          
                </div>
                <div class="col-md-4 col-md-offset-2"></div>
@@ -100,7 +100,7 @@
     document.getElementById("projectMaster").className="active open";
     document.getElementById("validation").className="active open";
 </script>
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function() {
 
@@ -143,12 +143,11 @@
 });
     });
 
-</script> -->
+</script>
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
 
     $(document).ready(function() {
-
         jQuery.validator.addMethod("fullname", function (value, element) {
             return this.optional(element) || /^[a-z\s]+$/i.test(value);
         }, "Only alphabetes allowed");     
@@ -188,4 +187,4 @@
 });
     });
 
-</script>
+</script>-->

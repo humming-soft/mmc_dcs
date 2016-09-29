@@ -14,7 +14,7 @@ class project_Model extends CI_Model {
 
     }
     // Inserting in Table Data Attribute
-    function addNewProject($data)
+    function project_add($data)
     {
             $this->db->insert('tbl_project_master', $data);
             return true;

@@ -10,7 +10,7 @@ class Common extends CI_Controller
         $this->load->library('session');
         $this->load->view("template/header");
         $this->load->view('template/frame');
-        $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+        /*$this->form_validation->set_error_delimiters('<div class="error">', '</div>');*/
         date_default_timezone_set('Asia/Calcutta'); // to set the time zone
     }
 
@@ -113,22 +113,6 @@ public function validation()
     $this->load->view('validation');
     $this->load->view('template/footer');			
 }
-
-public function validation_submit()
-{
- $this->form_validation->set_rules('name','Name','trim|required');
- $this->form_validation->set_rules('mobile','Mobile No','trim|required');
- $this->form_validation->set_rules('email','Email Id','trim|required');	
- if ($this->form_validation->run() == TRUE)
- {
- }
- else
- {
-    $this->load->view('validation');
-    $this->load->view('template/footer');	
-}
-}
-
 public function form4()
 {
     $this->load->view('forms');

@@ -47,53 +47,35 @@
 <h4 class="m-t-3 text-uppercase">Add New Project</h4>
 <div class="row">
     <div class="col-lg-6">
-        <form class="form-horizontal" action="<?php echo base_url();?>project/addNewProject" method="post">
+       <?php echo form_open('project/add_new_project' , array('id' => 'validations'));?>
             <div class="form-group">
                 <label for="project_name" class="col-sm-3 control-label">Project Name</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="project_name" name="strProjectName">
+                    <?php echo form_error('strProjectName'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <label for="from_datepicker" class="col-sm-3 control-label">From</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
+                    <?php echo form_error('dateFrom'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <label for="to_datepicker" class="col-sm-3 control-label">To</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
+                    <?php echo form_error('dateTo'); ?>
                 </div>
             </div>
             <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <!--<form class="form-horizontal">
-            <div class="form-group">
-                <label for="inputEmail3" class="col-sm-3 control-label">Disabled Input</label>
-                <div class="col-sm-9">
-                    <input type="email" class="form-control" placeholder="Disabled Input Here..." disabled="disabled">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputEmail3" class="col-sm-3 control-label">Textarea</label>
-                <div class="col-sm-9">
-                    <textarea class="form-control" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputEmail3" class="col-sm-3 control-label">Static Control</label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">email@example.com</p>
-                </div>
-            </div>
-        </form>-->
+       <?php echo form_close();?>
     </div>
     <div class="col-md-4 col-md-offset-2"></div>
 </div>
 </div>
 </div>
-
 <!-- END EDIT CONTENT -->
 </div>
 </div>
@@ -103,32 +85,41 @@
 
 <script>
     $(document).ready(function() {
-       /* $("#submit").click(function(){
-            var name = $("#name").val();
-            var email = $("#email").val();
-            var password = $("#password").val();
-            var contact = $("#contact").val();
-// Returns successful data submission message when the entered information is stored in database.
-            var dataString = 'name1='+ name + '&email1='+ email + '&password1='+ password + '&contact1='+ contact;
-            if(name==''||email==''||password==''||contact=='')
-            {
-                alert("Please Fill All Fields");
+        jQuery.validator.addMethod("fullname", function (value, element) {
+            return this.optional(element) || /^[a-z\s]+$/i.test(value);
+        }, "Only alphabetes allowed");
+        $("#validations").validate({
+            rules: {
+                strProjectName: {
+                    fullname: true,
+                    minlength: 2,
+                    required: true
+                },
+                dateFrom:{
+                    required: true
+                },
+                dateTo:{
+                    required: true
+                }
+            },
+            messages: {
+                strProjectName: {
+                    required: "Project Name required"
+                },
+                dateFrom: {
+                    required: "Project Start Date is Required  required"
+                },
+                dateTo: {
+                    required: "Project End Date is required"
+                }
+            },
+            errorElement: "span",
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent());
+                jQuery(element.parent()).addClass('has-error m-b-1'); // to show error on element also
             }
-            else
-            {
-// AJAX Code To Submit Form.
-                $.ajax({
-                    type: "POST",
-                    url: "ajaxsubmit.php",
-                    data: dataString,
-                    cache: false,
-                    success: function(result){
-                        alert(result);
-                    }
-                });
-            }
-            return false;
-        });*/
+
+        });
     });
     $('#from_datepicker').daterangepicker({
         singleDatePicker: true,
