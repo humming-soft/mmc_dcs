@@ -55,44 +55,51 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-horizontal">
-                           <?php echo form_open('common/addProject' , array('id' => 'validations'));?>
-                            <div class="form-group">
-                                <label for="name1" class="col-sm-3 control-label">Name</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="name" name ="name">
-                                    <?php echo form_error('name'); ?>
-                                </div>
+                         <?php echo form_open('common/addProject' , array('id' => 'validations'));?>
+                         <div class="form-group">
+                            <label for="name1" class="col-sm-3 control-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="name" name ="name">
+                                <?php echo form_error('name'); ?>
                             </div>
-                            <div class="form-group">
-                                <label for="mobile1" class="col-sm-3 control-label">Mobile</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control"  id="mobile" name ="mobile">
-                                    <?php echo form_error('mobile'); ?>                 
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile1" class="col-sm-3 control-label">Mobile</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"  id="mobile" name ="mobile">
+                                <?php echo form_error('mobile'); ?>                 
                             </div>
-                            <div class="form-group">
-                                <label for="email1" class="col-sm-3 control-label">Email</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control"  id="email" name ="email">
-                                    <?php echo form_error('email'); ?>                  
-                                </div>
-                            </div>  
-                            <div class="form-group">
-                             <label for="insert" class="col-sm-3 control-label"></label>            
-                             <div class="col-sm-2">
-                               <button type="submit" class="btn btn-block m-b-2 btn-primary" name="insert" id="insert">Insert</button>
-                           </div>
-                       </div>
-                      <?php echo form_close();?>
-                   </div>          
-               </div>
-               <div class="col-md-4 col-md-offset-2"></div>
-           </div>
-           <!-- END Basic Elements -->
-       </div>
-   </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email1" class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"  id="email" name ="email">
+                                <?php echo form_error('email'); ?>                  
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                            <label for="upload1" class="col-sm-3 control-label">File Upload</label>
+                            <div class="col-sm-9">
+                            <input type="file" name="upload" id="upload" class="form-control">
+                            <?php echo form_error('upload'); ?>
+                            </div>
+                        </div>   
+                        <div class="form-group">
+                           <label for="insert" class="col-sm-3 control-label"></label>            
+                           <div class="col-sm-2">
+                             <button type="submit" class="btn btn-block m-b-2 btn-primary" name="insert" id="insert">Insert</button>
+                         </div>
+                     </div>
+                     <?php echo form_close();?>
+                 </div>          
+             </div>
+             <div class="col-md-4 col-md-offset-2"></div>
+         </div>
+         <!-- END Basic Elements -->
+     </div>
+ </div>
 
-   <!-- END EDIT CONTENT -->
+ <!-- END EDIT CONTENT -->
 </div>
 </div>
 
@@ -100,7 +107,7 @@
     document.getElementById("projectMaster").className="active open";
     document.getElementById("validation").className="active open";
 </script>
-<script type="text/javascript">
+<!--<script type="text/javascript">
 
     $(document).ready(function() {
 
@@ -143,9 +150,9 @@
 });
     });
 
-</script>
+</script>-->
 
-<!--<script type="text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function() {
         jQuery.validator.addMethod("fullname", function (value, element) {
@@ -153,7 +160,7 @@
         }, "Only alphabetes allowed");     
         $("#validations").validate({
             rules: {
-               name: {
+             name: {
                 fullname: true,
                 minlength: 2,
                 required: true
@@ -168,7 +175,7 @@
             }               
         },
         messages: {
-         name: {
+           name: {
             required: "Name required"         
         },
         mobile: {
@@ -187,4 +194,4 @@
 });
     });
 
-</script>-->
+</script>
