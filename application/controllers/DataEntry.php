@@ -9,6 +9,8 @@ class Dataentry extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->model('common_model');
+        $this->load->model('journal_model');
+        $this->load->model('project_Model');
         $this->load->view("template/header");
         $this->load->view('template/frame');
         $this->load->library('excel');
@@ -25,6 +27,13 @@ class Dataentry extends CI_Controller
         $this->load->view('data_entry/add_data');
         $this->load->view('template/footer');
     }
+    public function list_dataentry(){
+        $data['records'] = $this->project_Model->getProject();
+        $data['journalType'] = $this->journal_model->getJournalType();
+        $data['journal'] = $this->journal_model->getJournal();
+        $this->load->view('data_entry/list_dataentry',$data);
+        $this->load->view('template/footer');
+    }
     /**
      * @Ancy
      * date:29/09/2016
@@ -38,6 +47,7 @@ class Dataentry extends CI_Controller
             $file = $_FILES['file']['tmp_name'];
             $parse_array = $this->parse_excel($file);
             $highestRow = $this->get_row($file);
+            $journal_id=$this->input->post("journal_id");
             //  $highestColumnIndex = $this->get_column($file);
             $i = 1;
             while ($i <= $highestRow) {
@@ -52,7 +62,14 @@ class Dataentry extends CI_Controller
                 $res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
                 $i++;
             }
+            if($res){
+                redirect('dataentry/list_dataentry', 'refresh');
+            }
+            else{
+                redirect('journal/list_journals', 'refresh');
+            }
         }
+
     }
     /**
      * @Ancy
@@ -87,6 +104,82 @@ class Dataentry extends CI_Controller
             }
         }
         return $val;
+    }
+    public function doupload() {
+
+        $root = $_SERVER['DOCUMENT_ROOT'];
+        $name;
+        $temp;
+        $album;
+        $date;
+        $des;
+        $chk = 0;
+        $temp = array();
+        $name = array();
+        $data = array();
+        if($this->input->post('fileSubmit') && !empty($_FILES['userFiles']['name'])){
+            $filesCount = count($_FILES['userFiles']['name']);
+            for($i = 0; $i < $filesCount; $i++){
+                $_FILES['userFile']['name'] = $_FILES['userFiles']['name'][$i];
+                $_FILES['userFile']['type'] = $_FILES['userFiles']['type'][$i];
+                $_FILES['userFile']['tmp_name'] = $_FILES['userFiles']['tmp_name'][$i];
+                $_FILES['userFile']['error'] = $_FILES['userFiles']['error'][$i];
+                $_FILES['userFile']['size'] = $_FILES['userFiles']['size'][$i];
+                // echo '<pre>';
+                // print_r($name[0]);
+                // echo '</pre>';
+                $name = explode('.', $_FILES['userFiles']['name'][$i]);
+                $temp = explode('_', $name[0]);
+                $album = $temp[0];
+                $date = $temp[1];
+                $desc = $temp[2];
+                // print "$album <br />";
+                // print "$date <br />" ;
+                // print "$desc <br />" ;
+
+                // check whether there is a folder in the document root if not create
+                if (!is_dir($root.'/'.'gallery'))
+                {
+                    mkdir($root.'/'.'gallery', 0777, true);
+                }
+
+                // check whether there is a folder for album inside the gallery if not create
+                if (!is_dir($root.'/'.'gallery'.'/'.$album))
+                {
+                    mkdir($root.'/'.'gallery'.'/'.$album, 0777, true);
+                }
+                // check whether there is a folder for date inside the album if not create
+                if (!is_dir($root.'/'.'gallery'.'/'.$album.'/'.$date))
+                {
+                    mkdir($root.'/'.'gallery'.'/'.$album.'/'.$date, 0777, true);
+                }
+
+                $uploadPath = $root.'/'.'gallery'.'/'.$album.'/'.$date;
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if(!$this->upload->do_upload('userFile'))
+                {
+                    $chk = 1;
+                }
+            }
+            if($chk == 1)
+            {
+                $error = array('error' => 'Image Upload Failed, Try Again !','success' => '');
+            }
+            else
+            {
+                $error = array('error' => '','success' => 'Image Upload Successfully!');
+            }
+            $this->load->view('image_upload',$error);
+            $this->load->view('template/footer');
+        }
+        else{
+            // throw server side error
+        }
+
     }
 }
     /* for ($x = 1; $x <= $r; $x++) {

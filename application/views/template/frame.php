@@ -58,26 +58,26 @@
                             <span class="nav-label">Project</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="<?php echo base_url('journal/list_journal') ?>">
+                    <li class="" id="subJournal">
+                        <a href="<?php echo base_url('journal/list_journals') ?>">
                             <span class="nav-label">Journals</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="<?php echo base_url('dataentry/add_data') ?>">
+                    <li class="" id="dataEntry">
+                        <a href="<?php echo base_url('dataentry/list_dataentry') ?>">
                             <span class="nav-label">Data Entry</span>
                         </a>
                     </li>
-                    <li class="" id="validation">
-                        <a href="<?php echo base_url('common/validation') ?>">
+                    <!--<li class="" id="validation">
+                        <a href="<?php /*echo base_url('common/validation') */?>">
                             <span class="nav-label">Validation</span>
                         </a>
                     </li>
 					<li class="" id="imageupload">
-                        <a href="<?php echo base_url('common/imageupload') ?>">
+                        <a href="<?php /*echo base_url('common/imageupload') */?>">
                             <span class="nav-label">Image Upload</span>
                         </a>
-                    </li>
+                    </li>-->
                 </ul>
             </li>
         </ul>

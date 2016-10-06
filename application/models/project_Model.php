@@ -32,13 +32,14 @@ class project_Model extends CI_Model {
         $this->db->where('pjct_master_id', $id);
         $this->db->delete('tbl_project_master');
     }
-    function update_project($id,$pjct_name,$pjct_from,$pjct_to)
+    function update_project($id,$pjct_name,$pjct_from,$pjct_to,$pjct_desc)
     {
         $this->db->where('pjct_master_id',$id);
         $this->db->set('pjct_name',$pjct_name );
+        $this->db->set('pjct_desc',$pjct_desc );
         $this->db->set('pjct_from',$pjct_from );
         $this->db->set('pjct_to',$pjct_to );
         $this->db->update('tbl_project_master');
         return true;
     }
-} 
+}

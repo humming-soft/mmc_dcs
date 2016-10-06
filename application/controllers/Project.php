@@ -31,7 +31,7 @@ class Project extends CI_Controller
     {
         $username = $this->session->userdata('username');
         $id=$this->session->userdata('uid');
-        $data = array('pjct_name' =>$this->input->post("strProjectName"),'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))),'pjct_to'=>date("Y-m-d", strtotime($this->input->post("dateTo"))));
+        $data = array('pjct_name' =>$this->input->post("strProjectName"),'pjct_desc' =>$this->input->post("strProjectDesc"),'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))),'pjct_to'=>date("Y-m-d", strtotime($this->input->post("dateTo"))));
         $result = $this->project_Model->project_add($data);
         if($result==true){
             redirect('project/list_project', 'refresh');
@@ -47,20 +47,17 @@ class Project extends CI_Controller
     public function update_project(){
         $id= $this->input->post('projectId');
         $pjct_name=$this->input->post("strProjectName");
+        $pjct_desc=$this->input->post("strProjectDesc");
         $pjct_from = $this->input->post("dateFrom");
         $pjct_to=$this->input->post("dateTo");
-        $result=$this->project_Model->update_project($id,$pjct_name,$pjct_from,$pjct_to);
+        $result=$this->project_Model->update_project($id,$pjct_name,$pjct_from,$pjct_to,$pjct_desc);
         if($result==true){
-            $sess_array = array("message" =>"Added Successfully","type" => 1);
-            $this->session->set_userdata('message', $sess_array);
-            $this->load->view('project/list_project');
-            $this->load->view('template/footer');
+            redirect('project/list_project', 'refresh');
         }
         else
         {
             return false;
         }
     }
-
 
 }

@@ -65,8 +65,8 @@
 <tr>
     <th  style="font-weight: 600; color: #2c97de">No</th>
     <th  style="font-weight: 600; color: #2c97de">Project Name</th>
+    <th  style="font-weight: 600; color: #2c97de">Description</th>
     <th  style="font-weight: 600; color: #2c97de">Start Date</th>
-    <th  style="font-weight: 600;color: #2c97de">End Date</th>
     <th  style="font-weight: 600;color: #2c97de">Actions</th>
 </tr>
 </thead>
@@ -76,11 +76,11 @@ foreach ($records as $record):?>
 <tr>
     <td class="text-white"><?php echo $sno; ?></td>
     <td class="text-white"><?php echo $record->pjct_name; ?></td>
+    <td class="text-white"><?php echo $record->pjct_desc; ?></td>
     <td class="text-white"><?php echo $record->pjct_from; ?></td>
-    <td class="text-white"><?php echo $record->pjct_to; ?></td>
     <td class="text-center v-a-m">
         <div class="btn-group" role="group" aria-label="...">
-            <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" ><span class="glyphicon glyphicon-edit">&nbsp;</span></a>
+            <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" data-desc="<?php echo $record->pjct_desc ; ?>"><span class="glyphicon glyphicon-edit">&nbsp;</span></a>
             <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>"><span class="glyphicon glyphicon-trash">&nbsp;</span></a>
         </div>
     </td>
@@ -107,42 +107,61 @@ endforeach; ?>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Edit The Project Details</h4>
                 </div>
-                <input type="hidden" class="form-control" id="projectId" name="projectId">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="project_name" class="col-sm-3 control-label">Project Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="strProjectName" name="strProjectName">
+                    <div class="row">
+                        <div class="col-lg-12">
+                                    <div class="form-horizontal">
+                                        <?php echo form_open('project/update_project' , array('id' => 'validations'));?>
+                                        <div class="form-group">
+                                            <input type="hidden" id="projectId" name="projectId">
+                                            <label for="project_name" class="col-sm-3 control-label">Project Name</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="strProjectName" name="strProjectName">
+                                                <?php echo form_error('strProjectName'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="project_name" class="col-sm-3 control-label">Description</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="strProjectDesc" name="strProjectDesc">
+                                                <?php echo form_error('strProjectDesc'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="from_datepicker" class="col-sm-3 control-label">From</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
+                                                <?php echo form_error('dateFrom'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="to_datepicker" class="col-sm-3 control-label">To</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
+                                                <?php echo form_error('dateTo'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="col-md-4 col-md-offset-2"></div>
+
+                            <!-- END Basic Elements -->
                         </div>
-                        <?php echo form_error('strProjectName'); ?>
                     </div>
-                    <div class="form-group">
-                        <label for="from_datepicker" class="col-sm-3 control-label">From</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
-                        </div>
-                        <?php echo form_error('dateFrom'); ?>
-                    </div>
-                    <div class="form-group">
-                        <label for="to_datepicker" class="col-sm-3 control-label">To</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
-                        </div>
-                        <?php echo form_error('dateTo'); ?>
-                    </div>
-                </div>
+                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary btn-sm" value="Save Changes" />
                 </div>
-            <!--</form>--> <?php echo form_close();?>
-              <!--  </form>-->
-            </div>
-         </div>
+            <?php echo form_close();?>
+        </div>
     </div>
 </div>
 <script>
     $("#datatables-example").DataTable();
+</script>
+<script>
+    document.getElementById("projectMaster").className="active open";
+    document.getElementById("subProject").className="active open";
 </script>
 <script>
 $(document).ready(function() {
@@ -152,7 +171,6 @@ $(document).ready(function() {
     $("#validations").validate({
         rules: {
             strProjectName: {
-                fullname: true,
                 minlength: 2,
                 required: true
             },
@@ -195,8 +213,10 @@ $(".modaledit").click(function(){
             var pjctName = $(this).attr("data-pjctName");
             var pjtFrom = $(this).attr("data-pjtFrom");
             var pjtTo = $(this).attr("data-pjtTo");
+    var pjtDesc = $(this).attr("data-desc");
                 $('#projectId').val( projectId );
                 $('#strProjectName').val( pjctName );
+                 $('#strProjectDesc').val( pjtDesc );
                 $('#from_datepicker').val( pjtFrom );
                 $('#to_datepicker').val( pjtTo );
 
