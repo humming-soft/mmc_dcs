@@ -105,8 +105,8 @@
 </div>
 
 <script>
-    document.getElementById("projectMaster").className="active open";
-    document.getElementById("subJournal").className="active open";
+    $("#projectMaster").addClass("active open");
+    $("#subJournal").addClass("active open");
 </script>
 <script type="text/javascript">
 

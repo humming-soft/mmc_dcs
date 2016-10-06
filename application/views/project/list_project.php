@@ -158,10 +158,11 @@ endforeach; ?>
 </div>
 <script>
     $("#datatables-example").DataTable();
+	$('div.dataTables_filter input').attr('placeholder', 'Enter the text here');	
 </script>
 <script>
-    document.getElementById("projectMaster").className="active open";
-    document.getElementById("subProject").className="active open";
+    $("#projectMaster").addClass("active open");
+    $("#subProject").addClass("active open");
 </script>
 <script>
 $(document).ready(function() {

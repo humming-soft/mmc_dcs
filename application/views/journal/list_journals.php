@@ -163,10 +163,11 @@
 </div>
 <script>
     $("#datatables-example").DataTable();
+	$('div.dataTables_filter input').attr('placeholder', 'Enter the text here');
 </script>
 <script>
-    document.getElementById("projectMaster").className="active open";
-    document.getElementById("subJournal").className="active open";
+    $("#projectMaster").addClass("active open");
+    $("#subJournal").addClass("active open");
 </script>
 <script>
     $(document).ready(function() {
