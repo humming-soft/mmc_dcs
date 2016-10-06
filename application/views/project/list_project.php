@@ -149,7 +149,7 @@ endforeach; ?>
                     </div>
                  </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary btn-sm" value="Save Changes" />
                 </div>
             <?php echo form_close();?>
