@@ -154,7 +154,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
                 <input type="submit" class="btn btn-primary btn-sm" value="Save Changes" />
             </div>
             <?php echo form_close();?>
@@ -163,10 +163,11 @@
 </div>
 <script>
     $("#datatables-example").DataTable();
+	$('div.dataTables_filter input').attr('placeholder', 'Enter the text here');
 </script>
 <script>
-    document.getElementById("projectMaster").className="active open";
-    document.getElementById("subJournal").className="active open";
+    $("#projectMaster").addClass("active open");
+    $("#subJournal").addClass("active open");
 </script>
 <script>
     $(document).ready(function() {

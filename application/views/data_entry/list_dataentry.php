@@ -142,7 +142,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
                 <input type="submit" class="btn btn-primary btn-sm"  name ="fileSubmit" value="Submit" id="uploader" />
             </div>
             <?php echo form_close();?>
@@ -192,7 +192,7 @@
                             <div class="form-group">
                                 <label for="file_upload" class="col-sm-3 control-label">File input</label>
                                 <div class="col-sm-9">
-                                    <input type="file" class="form-control" name="file" id="exampleInputFile">
+                                    <input type="file" name="file" id="exampleInputFile">
                                     <?php echo form_error('mobile'); ?>
                                 </div>
                             </div>
@@ -205,8 +205,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                <input class="btn btn-primary" type="submit" name ="submit" value="Submit" id="uploader">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                <input class="btn btn-primary btn-sm" type="submit" name ="submit" value="Submit" id="uploader">
             </div>
             <?php echo form_close();?>
         </div>
@@ -214,10 +214,11 @@
 </div>
 <script>
     $("#datatables-example").DataTable();
+	$('div.dataTables_filter input').attr('placeholder', 'Enter the text here');
 </script>
 <script>
-    document.getElementById("projectMaster").className="active open";
-    document.getElementById("dataEntry").className="active open";
+    $("#projectMaster").addClass("active open");
+    $("#dataEntry").addClass("active open");
 </script>
 <script>
     $(document).ready(function() {

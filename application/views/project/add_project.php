@@ -105,8 +105,8 @@
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
 <script>
-    document.getElementById("projectMaster").className="active open";
-    document.getElementById("subProject").className="active open";
+    $("#projectMaster").addClass("active open");
+    $("#subProject").addClass("active open");
 </script>
 <script>
     $(document).ready(function() {
