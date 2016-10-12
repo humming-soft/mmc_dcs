@@ -80,8 +80,9 @@ foreach ($records as $record):?>
     <td class="text-white"><?php echo $record->pjct_from; ?></td>
     <td class="text-center v-a-m">
         <div class="btn-group" role="group" aria-label="...">
-            <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" data-desc="<?php echo $record->pjct_desc ; ?>"><span class="glyphicon glyphicon-edit">&nbsp;</span></a>
-            <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>"><span class="glyphicon glyphicon-trash">&nbsp;</span></a>
+            <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" data-desc="<?php echo $record->pjct_desc ; ?>" data-contract="<?php echo $record->cont_name ; ?>"  data-parking="<?php echo $record->has_parking ; ?>"  data-depot="<?php echo $record->has_depot ; ?>"  ><span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="Update">&nbsp;</span></a>
+            <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
+            <a href="" data-toggle="modal" data-target="#myModalAdd" class="modalAddStation" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>" data-pjctName="<?php echo $record->pjct_name; ?>"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Add Stations">&nbsp;</span></a>
         </div>
     </td>
 </tr>
@@ -128,6 +129,13 @@ endforeach; ?>
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="project_name" class="col-sm-3 control-label">Cotractor name</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="strContractName" name="strContractName">
+                                                <?php echo form_error('strProjectDesc'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="from_datepicker" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
@@ -141,6 +149,28 @@ endforeach; ?>
                                                 <?php echo form_error('dateTo'); ?>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">Parking </label>
+                                            <div class="col-sm-9">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="intParking" id="intParking1" value="1"> Yes
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="intParking" id="intParking0" value="0"> No
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">Depot </label>
+                                            <div class="col-sm-9">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="intDepot" id="intDepot1" value="1">Yes
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="intDepot" id="intDepot0" value="0">No
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 <div class="col-md-4 col-md-offset-2"></div>
 
@@ -152,6 +182,68 @@ endforeach; ?>
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary btn-sm" value="Save Changes" />
                 </div>
+            <?php echo form_close();?>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <?php echo form_open('project/update_project' , array('id' => 'validations'));?>
+            <!--<form method=post id=updaterecord action="<?php /*/*echo base_url(); */?>project/updateProject">-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit The Project Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-horizontal">
+                            <?php echo form_open('project/update_project' , array('id' => 'validations'));?>
+                            <div class="form-group">
+                                <input type="hidden"  name="journalid" id="journalid">
+                                <label for="mobile1" class="col-sm-3 control-label">Project Name</label>
+                                <div class="col-sm-9">
+                                    <label for="strPjctname" class="control-label" style="color: white" id="strPjctname" name="strPjctname"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="project_name" class="col-sm-3 control-label">Station/Depot/parking Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="strStationName" name="strStationName">
+                                    <?php echo form_error('strProjectDesc'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name1" class="col-sm-3 control-label">Category</label>
+                                <div class="col-sm-9">
+                                    <select name="intCategoryId" class="form-control" id="intCategoryId">
+                                        <option value="-1">Select Category</option>
+                                        <?php
+                                        foreach ($category as $categ):?>
+                                            <option value="<?php echo $categ->category_type_id; ?>"><?php echo $categ->category_type_name; ?> </option>
+                                        <?php  endforeach;?>
+                                    </select>
+                                    <?php echo form_error('name'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="project_name" class="col-sm-3 control-label">Cotractor name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="strContractName" name="strContractName">
+                                    <?php echo form_error('strProjectDesc'); ?>
+                                </div>
+                            </div>
+                        <div class="col-md-4 col-md-offset-2"></div>
+
+                        <!-- END Basic Elements -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary btn-sm" value="Save Changes" />
+            </div>
             <?php echo form_close();?>
         </div>
     </div>
@@ -214,13 +306,26 @@ $(".modaledit").click(function(){
             var pjctName = $(this).attr("data-pjctName");
             var pjtFrom = $(this).attr("data-pjtFrom");
             var pjtTo = $(this).attr("data-pjtTo");
-    var pjtDesc = $(this).attr("data-desc");
+            var pjtDesc = $(this).attr("data-desc");
+            var contractName=$(this).attr("data-contract");
+            var parking=$(this).attr("data-parking");
+            var depot=$(this).attr("data-depot");
                 $('#projectId').val( projectId );
                 $('#strProjectName').val( pjctName );
-                 $('#strProjectDesc').val( pjtDesc );
+                $('#strProjectDesc').val( pjtDesc );
                 $('#from_datepicker').val( pjtFrom );
                 $('#to_datepicker').val( pjtTo );
-
+                $('#strContractName').val( contractName );
+        if(parking==1){
+                $('#intParking1').attr('checked',true);
+        }if(parking==0){
+                $('#intParking0').attr('checked',true);
+        }
+        if(depot==1){
+                $('#intDepot1').attr('checked',true);
+        }if(depot==0){
+                $('#intDepot0').attr('checked',true);
+        }
         });
  });
     $('#from_datepicker').daterangepicker({

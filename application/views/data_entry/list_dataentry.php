@@ -164,7 +164,7 @@
                         <div class="form-horizontal">
                             <?php echo form_open_multipart('dataentry/parse_data', array('id' => 'dataform','class'=>'form-horizontal'));?>
                             <div class="form-group">
-                                <input type="hidden"  name="journal_id" id="journal_id">
+                                <input type="hidden"  name="journalid" id="journalid">
                                 <label for="mobile1" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
                                     <label for="strPjctname" class="control-label" style="color: white" id="strPjctname" name="strPjctname"></label>
@@ -185,8 +185,8 @@
                             <div class="form-group">
                                 <label for="from_datepicker" class="col-sm-3 control-label">Data Date</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control"  id="data_datepicker" name="dateFrom">
-                                    <?php echo form_error('dateFrom'); ?>
+                                    <input type="text" class="form-control"  id="data_date" name="datadate">
+                                    <?php echo form_error('datadate'); ?>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -270,7 +270,7 @@
             var journalId = $(this).attr("data-journalId");
             var journalName = $(this).attr("data-journalName");
            /* var journalType = $(this).attr("data-journalType");*/
-            $('#journal_id').val( journalId );
+            $('#journalid').val( journalId );
             $('#strPjctname').text(projectName) ;
             $('#strJournalName').text( journalName );
            /* $('#strJournalType').text( journalType );*/
@@ -281,14 +281,14 @@
             var journalId = $(this).attr("data-journalId");
             var journalName = $(this).attr("data-journalName");
            /* var journalType = $(this).attr("data-journalType");*/
-            $('#journal_id').val( journalId );
+            $('#journalid').val( journalId );
             $('#strImgPjctname').text(projectName) ;
             $('#strImgJournalName').text( journalName );
             /*$('#strImgJournalType').text( journalType );*/
 
         });
     });
-    $('#data_datepicker').daterangepicker({
+    $('#data_date').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true
     });

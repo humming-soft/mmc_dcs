@@ -57,7 +57,7 @@
             <div class="form-group">
                 <label for="file_upload" class="col-sm-3 control-label">File input</label>
                 <div class="col-sm-9">
-                <input type="file" name="file" id="exampleInputFile">
+                <input type="file" name="userfile" id="userfile">
                 </div>
             </div>
             <!--<div class="form-group">

@@ -48,4 +48,11 @@ class journal_model extends CI_Model {
         $this->db->where('journal_master_id', $id);
         $this->db->delete('tbl_journal_master');
     }
+    function get_journal_name($id)
+    {
+        $query=$this->db->query("SELECT  journal_name FROM tbl_journal_master where journal_master_id=$id");
+        $result= $query->result_array();
+       return $result;
+
+    }
 }

@@ -43,37 +43,36 @@ class Dataentry extends CI_Controller
      */
     public function parse_data(){
         $parse_array = array();
-        if (isset($_POST["submit"])) {
             $file = $_FILES['file']['tmp_name'];
             $parse_array = $this->parse_excel($file);
-            print_r($parse_array);
-            exit;
             $highestRow = $this->get_row($file);
-            //  $highestColumnIndex = $this->get_column($file);
-            $i = 1;
-            while ($i <= $highestRow) {
-                $viaduct_master_id = $parse_array[$i][0];
-                $incident_date = $parse_array[$i][1];
-                $incident_desc = $parse_array[$i][2];
-                $data_date = $parse_array[$i][3];
-                $cre_by = $this->session->userdata('uid');
-                $crea_date = date('Y-m-d H:i:s');
-                $mod_date = date('Y-m-d H:i:s');
-                $mod_by = $this->session->userdata('uid');
-                echo $incident_date;
-                echo $data_date;
+            $id=$this->input->post("journalid");
+            $row=$this->journal_model->get_journal_name($id);
+            foreach ($row as $row):
+                $journalname=$row['journal_name'];
+            endforeach;
+            switch($journalname){
+                case "r1": $i = 1;
+                           while ($i <= $highestRow) {
+                                $viaduct_master_id = $parse_array[$i][0];
+                                $incident_desc = $parse_array[$i][2];
+                                $incident_date = date("Y-m-d", strtotime($parse_array[$i][1]));
+                                $data_date =date("Y-m-d", strtotime($parse_array[$i][3]));
+                                $cre_by = $this->session->userdata('uid');
+                                $crea_date = date('Y-m-d H:i:s');
+                                $mod_date = date('Y-m-d H:i:s');
+                                $mod_by = $this->session->userdata('uid');
+                                $res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                                $i++;
+                                }if($res){
+                                    redirect('dataentry/list_dataentry', 'refresh');
+                                }else{
+                                    redirect('journal/list_journals', 'refresh');
+                                 }
+                break;
+                default:break;
+             }
 
-                //$res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                $i++;
-            }
-            exit;
-        }
-       /* if($res){
-            redirect('dataentry/list_dataentry', 'refresh');
-        }
-        else{
-            redirect('journal/list_journals', 'refresh');
-        }*/
     }
     /**
      * @Ancy
@@ -97,15 +96,24 @@ class Dataentry extends CI_Controller
     public function parse_excel($file){
         $objPHPExcel = PHPExcel_IOFactory::load($file);
         $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        PHPExcel_Shared_Date::ExcelToPHP($dateValue = 0, $adjustToTimezone = FALSE, $timezone = NULL);
         $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
         $c = $objPHPExcel->getActiveSheet()->getHighestColumn();
         $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($c);
         $val = array();
         for ($row = 1; $row <= $highestRow; ++$row) {
             for ($col = 0; $col < $highestColumnIndex; ++$col) {
-                $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col, $row)->getValue();
-                $val[$row][$col] = $cell;
-            }
+                $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col,$row);
+                if(PHPExcel_Shared_Date::isDateTime($cell)) {
+                    $InvDate= $cell->getValue();
+                    $cellVal = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($InvDate));
+                }
+                else{
+                    $cellVal=$cell->getValue();
+                }
+               /* $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col, $row)->getValue();*/
+                $val[$row][$col] = $cellVal;
+        }
         }
         return $val;
     }
@@ -233,3 +241,14 @@ class Dataentry extends CI_Controller
         $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($c);
         return $highestColumnIndex;
     }*/
+
+
+/*$viaduct_master_id = $parse_array[$i][0];
+$incident_desc = $parse_array[$i][2];
+$incident_date = date("Y-m-d", strtotime($parse_array[$i][1]));
+$data_date =date("Y-m-d", strtotime($parse_array[$i][3]));
+$cre_by = $this->session->userdata('uid');
+$crea_date = date('Y-m-d H:i:s');
+$mod_date = date('Y-m-d H:i:s');
+$mod_by = $this->session->userdata('uid');
+$res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);*/

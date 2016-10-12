@@ -68,6 +68,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="project_name" class="col-sm-3 control-label">Cotractor name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="strContractName" name="strContractName">
+                                    <?php echo form_error('strProjectDesc'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="from_datepicker" class="col-sm-3 control-label">From</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
@@ -79,6 +86,28 @@
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
                                     <?php echo form_error('dateTo'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Parking </label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="intParking" value="1"> Yes
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="intParking" value="0"> No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Depot </label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="intDepot" value="1">Yes
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="intDepot" value="0">No
+                                    </label>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -17,6 +17,7 @@ class Project extends CI_Controller
     public function list_project()
     {
         $data['records'] = $this->project_Model->getProject();
+        $data['category'] = $this->project_Model->getCategory();
         $this->load->view('project/list_project',$data);
         $this->load->view('template/footer');
     }
@@ -30,8 +31,7 @@ class Project extends CI_Controller
     public function add_new_project()
     {
         $username = $this->session->userdata('username');
-        $id=$this->session->userdata('uid');
-        $data = array('pjct_name' =>$this->input->post("strProjectName"),'pjct_desc' =>$this->input->post("strProjectDesc"),'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))),'pjct_to'=>date("Y-m-d", strtotime($this->input->post("dateTo"))));
+        $data = array('pjct_name' =>$this->input->post("strProjectName"),'pjct_desc' =>$this->input->post("strProjectDesc"),'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))),'pjct_to'=>date("Y-m-d", strtotime($this->input->post("dateTo"))),'cont_name'=>$this->input->post("strContractName"),'has_parking'=>$this->input->post("intParking"),'has_depot'=>$this->input->post("intDepot"), 'created_by' =>$this->session->userdata('uid'),'created_date'=>date('Y-m-d H:i:s'),'modified_by'=>$this->session->userdata('uid'), 'modified_date'=>date('Y-m-d H:i:s'));
         $result = $this->project_Model->project_add($data);
         if($result==true){
             redirect('project/list_project', 'refresh');
@@ -50,7 +50,12 @@ class Project extends CI_Controller
         $pjct_desc=$this->input->post("strProjectDesc");
         $pjct_from = $this->input->post("dateFrom");
         $pjct_to=$this->input->post("dateTo");
-        $result=$this->project_Model->update_project($id,$pjct_name,$pjct_from,$pjct_to,$pjct_desc);
+        $cont_name=$this->input->post("strContractName");
+        $has_parking=$this->input->post("intParking");
+        $has_depot=$this->input->post("intDepot");
+        $modified_by=$this->session->userdata('uid');
+        $modified_date=date('Y-m-d H:i:s');
+        $result=$this->project_Model->update_project($id,$pjct_name,$pjct_from,$pjct_to,$pjct_desc,$cont_name,$has_parking,$has_depot,$modified_by,$modified_date);
         if($result==true){
             redirect('project/list_project', 'refresh');
         }
