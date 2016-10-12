@@ -46,8 +46,9 @@ class Dataentry extends CI_Controller
         if (isset($_POST["submit"])) {
             $file = $_FILES['file']['tmp_name'];
             $parse_array = $this->parse_excel($file);
+            print_r($parse_array);
+            exit;
             $highestRow = $this->get_row($file);
-            $journal_id=$this->input->post("journal_id");
             //  $highestColumnIndex = $this->get_column($file);
             $i = 1;
             while ($i <= $highestRow) {
@@ -59,17 +60,20 @@ class Dataentry extends CI_Controller
                 $crea_date = date('Y-m-d H:i:s');
                 $mod_date = date('Y-m-d H:i:s');
                 $mod_by = $this->session->userdata('uid');
-                $res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                echo $incident_date;
+                echo $data_date;
+
+                //$res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
                 $i++;
             }
-            if($res){
-                redirect('dataentry/list_dataentry', 'refresh');
-            }
-            else{
-                redirect('journal/list_journals', 'refresh');
-            }
+            exit;
         }
-
+       /* if($res){
+            redirect('dataentry/list_dataentry', 'refresh');
+        }
+        else{
+            redirect('journal/list_journals', 'refresh');
+        }*/
     }
     /**
      * @Ancy

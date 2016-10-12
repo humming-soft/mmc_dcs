@@ -52,7 +52,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-horizontal">
-                            <?php echo form_open('common/addProject' , array('id' => 'validations'));?>
+                            <?php echo form_open('project/add_new_project' , array('id' => 'validations'));?>
                             <div class="form-group">
                                 <label for="project_name" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
@@ -79,6 +79,12 @@
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
                                     <?php echo form_error('dateTo'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="insert" class="col-sm-3 control-label"></label>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-block m-b-2 btn-primary" name="insert" id="insert">Save</button>
                                 </div>
                             </div>
                             <?php echo form_close();?>
