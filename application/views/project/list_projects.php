@@ -1,11 +1,13 @@
-<!-- start: Javascript for validation-->
-<script src="<?php echo base_url(); ?>assets/jquery/jquery.min.js"></script>
+<script type="javascript" src="<?php echo base_url(); ?>assets/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/dataTables.bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
-<!-- end: Javascript for validation-->
+<script src="<?php echo base_url(); ?>assets/vendor/js/lib.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/vendor/js/select2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/vendor/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/stylesheets/app.min.179ab97f.css">
 <div class="content">
 <!-- START Sub-Navbar with Header only-->
 <div class="sub-navbar sub-navbar__header">
@@ -20,85 +22,88 @@
     </div>
 </div>
 <!-- END Sub-Navbar with Header only-->
-    <div class="sub-navbar sub-navbar__header-breadcrumbs">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="col-md-8 sub-navbar-column">
-                        <div class="sub-navbar-header">
-                            <h3>Project</h3>
-                        </div>
-                        <ol class="breadcrumb navbar-text navbar-right no-bg">
-                            <li class="current-parent">
-                                <a class="current-parent" href="<?php echo base_url(); ?>index-2.html">
-                                    <i class="fa fa-fw fa-home"></i>
-                                </a>
-                            </li>
-                            <li class="active">
-                                List Projects
-                            </li>
-                            <!--<li class="active">DataTables</li>-->
-                        </ol>
+
+<!-- START Sub-Navbar with Header and Breadcrumbs-->
+<div class="sub-navbar sub-navbar__header-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-8 sub-navbar-column">
+                    <div class="sub-navbar-header">
+                        <h3>Project</h3>
                     </div>
-                    <div class="col-md-4">
-                        <a class="btn btn-primary pull-right" style="margin-top: 20px;" href="<?php echo base_url();?>project/add_project">
-                            Add Project
-                        </a>
-                    </div>
+                    <ol class="breadcrumb navbar-text navbar-right no-bg">
+                        <li class="current-parent">
+                            <a class="current-parent" href="<?php echo base_url(); ?>index-2.html">
+                                <i class="fa fa-fw fa-home"></i>
+                            </a>
+                        </li>
+                        <li class="active">
+                            List Project
+                        </li>
+                        <!--<li class="active">DataTables</li>-->
+                    </ol>
+                  </div>
+                <div class="col-md-4">
+                    <a class="btn btn-primary pull-right" style="margin-top: 20px;" href="<?php echo base_url();?>project/add_project">
+                        Add Project
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- END Sub-Navbar with Header and Breadcrumbs-->
+</div>
+<!-- END Sub-Navbar with Header and Breadcrumbs-->
 
 
-    <div class="container">
-        <!-- START EDIT CONTENT -->
+<div class="container">
+<!-- START EDIT CONTENT -->
 
-        <div class="row">
-            <div class="col-lg-12">
-                <table id="datatables-example" class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th  style="font-weight: 600; color: #2c97de">No</th>
-                        <th  style="font-weight: 600; color: #2c97de">Project Name</th>
-                        <th  style="font-weight: 600; color: #2c97de">Description</th>
-                        <th  style="font-weight: 600; color: #2c97de">Start Date</th>
-                        <th  style="font-weight: 600;color: #2c97de">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php $sno=1;
-                    foreach ($records as $record):?>
-                        <tr>
-                            <td class="text-white"><?php echo $sno; ?></td>
-                            <td class="text-white"><?php echo $record->pjct_name; ?></td>
-                            <td class="text-white"><?php echo $record->pjct_desc; ?></td>
-                            <td class="text-white"><?php echo $record->pjct_from; ?></td>
-                            <td class="text-center v-a-m">
-                                <?php
-                                //split the array as comma seperated value
-                                $stationdat=$stations[$record->pjct_master_id];
-                                ?>
-                                <div class="btn-group" role="group" aria-label="...">
-                                    <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" data-desc="<?php echo $record->pjct_desc ; ?>" data-contract="<?php echo $record->cont_name ; ?>"  data-parking="<?php echo $record->has_parking ; ?>"  data-depot="<?php echo $record->has_depot ; ?>"  ><span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="Update">&nbsp;</span></a>
-                                    <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
-                                    <a href="" data-toggle="modal" data-target="#myModalStation" class="modalAddStation" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>" data-stationDetails="<?php echo $stationdat; ?>"  data-pjctName="<?php echo $record->pjct_name; ?>"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Add Stations">&nbsp;</span></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php
-                        $sno=$sno+1;
-                    endforeach; ?>
-                    </tbody>
-                </table>
-                <!-- END Zero Configuration -->
-            </div>
+<div class="row">
+<div class="col-lg-12">
+<table id="datatables-example" class="table table-striped table-bordered">
+<thead>
+<tr>
+    <th  style="font-weight: 600; color: #2c97de">No</th>
+    <th  style="font-weight: 600; color: #2c97de">Project Name</th>
+    <th  style="font-weight: 600; color: #2c97de">Description</th>
+    <th  style="font-weight: 600; color: #2c97de">Start Date</th>
+    <th  style="font-weight: 600;color: #2c97de">Actions</th>
+</tr>
+</thead>
+<tbody>
+<?php $sno=1;
+foreach ($records as $record):?>
+<tr>
+    <td class="text-white"><?php echo $sno; ?></td>
+    <td class="text-white"><?php echo $record->pjct_name; ?></td>
+    <td class="text-white"><?php echo $record->pjct_desc; ?></td>
+    <td class="text-white"><?php echo $record->pjct_from; ?></td>
+    <td class="text-center v-a-m">
+        <?php
+        //split the array as comma seperated value
+        $stationdat=$stations[$record->pjct_master_id];
+        ?>
+        <div class="btn-group" role="group" aria-label="...">
+            <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" data-desc="<?php echo $record->pjct_desc ; ?>" data-contract="<?php echo $record->cont_name ; ?>"  data-parking="<?php echo $record->has_parking ; ?>"  data-depot="<?php echo $record->has_depot ; ?>"  ><span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="Update">&nbsp;</span></a>
+            <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
+            <a href="" data-toggle="modal" data-target="#myModalStation" class="modalAddStation" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>" data-stationDetails="<?php echo $stationdat; ?>"  data-pjctName="<?php echo $record->pjct_name; ?>"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Add Stations">&nbsp;</span></a>
         </div>
-        <!-- END EDIT CONTENT -->
-    </div>
+    </td>
+</tr>
+<?php
+$sno=$sno+1;
+endforeach; ?>
+</tbody>
+</table>
+<!-- END Zero Configuration -->
+</div>
+</div>
+<!-- END EDIT CONTENT -->
+</div>
 
 </div>
+
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -232,7 +237,6 @@
         </div>
     </div>
 </div>
-
 <script>
     $("#datatables-example").DataTable();
     $('div.dataTables_filter input').attr('placeholder', 'Enter the text here');
@@ -318,13 +322,16 @@ $(".modaledit").click(function(){
         var pjctName = $(this).attr("data-pjctName");
         var	statdat = $(this).attr("data-stationDetails");
         var statdat1 = statdat.split(',777,');
+//        var $multiple = $('#multiple').select2();
+//        $multiple.val(["3", "2"]).trigger("change");
         for (var i = 0; i < statdat1.length; i++)
         {
             var roledat2 = statdat1[i].split(',');
             for (var k = 0; k < roledat2.length-1; k++)
             {
-                $('#multiple').val(roledat2);
-                /*$('#multiple').val(["3", "2"]).trigger("change");*/
+                //alert(roledat2[k]);
+                $('#multiple').select2(roledat2);
+//                $multiple.val(["3", "2"]).trigger("change");
             }
         }
         $('#projectMasterId').val( projectId );
@@ -339,8 +346,5 @@ $(".modaledit").click(function(){
         showDropdowns: true
     });
 </script>
-<script src="<?php echo base_url(); ?>assets/vendor/js/lib.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/vendor/js/select2.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/vendor/js/bootstrap-select.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/app.min.8c5687ed.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/plugins-init.js"></script>

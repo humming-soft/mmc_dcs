@@ -16,16 +16,16 @@ class Journal extends CI_Controller
     }
     public function list_journals()
     {
-        $data['records'] = $this->project_Model->getProject();
-        $data['journalType'] = $this->journal_model->getJournalType();
-        $data['journal'] = $this->journal_model->getJournal();
+        $data['records'] = $this->project_Model->project_get();
+        $data['journalType'] = $this->journal_model->journal_type_get();
+        $data['journal'] = $this->journal_model->journal_get();
         $this->load->view('journal/list_journals',$data);
         $this->load->view('template/footer');;
     }
     public function add_journal()
     {
-        $data['records'] = $this->project_Model->getProject();
-        $data['journalType'] = $this->journal_model->getJournalType();
+        $data['records'] = $this->project_Model->project_get();
+        $data['journalType'] = $this->journal_model->journal_type_get();
         $this->load->view('journal/add_journal',$data);
         $this->load->view('template/footer');;
     }
@@ -42,10 +42,9 @@ class Journal extends CI_Controller
     }
     public function update_journal(){
         $id= $this->input->post('journalId');
-        $pjct_id=$this->input->post("intPjtId");
         $jrnl_name=$this->input->post("strJournal");
         $jrnl_type = $this->input->post("intJournalType");
-        $result=$this->journal_model->update_journal($id,$pjct_id,$jrnl_name,$jrnl_type);
+        $result=$this->journal_model->update_journal($id,$jrnl_name,$jrnl_type);
         if($result==true){
             redirect('journal/list_journals', 'refresh');
         }else{

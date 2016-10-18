@@ -16,21 +16,45 @@ class Project extends CI_Controller
 
     public function list_project()
     {
-        $data['records'] = $this->project_Model->getProject();
-        $data['category'] = $this->project_Model->getCategory();
+        $data['records'] = $this->project_Model->project_get();
+        $data['allStation'] = $this->project_Model->project_get_station();
+        foreach ( $data['records'] as $project )
+        {
+            $datap="";
+            $data['stat']= $this->project_Model->project_stations($project->pjct_master_id);
+            foreach ( $data['stat'] as $stat )
+            {
+                $datap.=$stat->station_master_id.",";
+            }
+            $data['stations'][$project->pjct_master_id]=$datap."777";
+        }
         $this->load->view('project/list_project',$data);
         $this->load->view('template/footer');
     }
-
+    public function list_stations()
+    {
+        $data['records'] = $this->project_Model->station_get();
+        $data['category'] = $this->project_Model->category_get();
+        $data['region'] = $this->project_Model->region_get();
+        $this->load->view('project/list_stations',$data);
+        $this->load->view('template/footer');
+    }
     public function add_project()
     {
         $this->load->view('project/add_project');
         $this->load->view('template/footer');
         //test
     }
+    public function add_station()
+    {
+        $data['category'] = $this->project_Model->category_get();
+        $data['region'] = $this->project_Model->region_get();
+        $this->load->view('project/add_stations',$data);
+        $this->load->view('template/footer');
+        //test
+    }
     public function add_new_project()
     {
-        $username = $this->session->userdata('username');
         $data = array('pjct_name' =>$this->input->post("strProjectName"),'pjct_desc' =>$this->input->post("strProjectDesc"),'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))),'pjct_to'=>date("Y-m-d", strtotime($this->input->post("dateTo"))),'cont_name'=>$this->input->post("strContractName"),'has_parking'=>$this->input->post("intParking"),'has_depot'=>$this->input->post("intDepot"), 'created_by' =>$this->session->userdata('uid'),'created_date'=>date('Y-m-d H:i:s'),'modified_by'=>$this->session->userdata('uid'), 'modified_date'=>date('Y-m-d H:i:s'));
         $result = $this->project_Model->project_add($data);
         if($result==true){
@@ -40,9 +64,57 @@ class Project extends CI_Controller
             $this->load->view('template/footer');
         }
     }
+    public function add_new_station()
+    {
+        if($this->input->post("isActive")==1){
+            $isActive=$this->input->post("isActive");
+        }else{
+            $isActive=0;
+        }
+        $data = array('spd_name' =>$this->input->post("strStationName"),'region_master_id' =>$this->input->post("intRegionId"),'category_type_id' => $this->input->post("intCategoryId"),'is_active'=>$isActive, 'cre_by' =>$this->session->userdata('uid'), 'crea_date'=>date('Y-m-d H:i:s'),'mod_by'=>$this->session->userdata('uid'), 'mod_date'=>date('Y-m-d H:i:s'));
+        $result = $this->project_Model->station_add($data);
+        if($result==true){
+            redirect('project/list_stations', 'refresh');
+        }else{
+            $this->load->view('project/add_stations');
+            $this->load->view('template/footer');
+        }
+    }
+    public function add_update_station()
+    {
+        $id=$this->input->post("projectMasterId");
+        $target['station'] = $this->input->post("station");
+        $cre_by = $this->session->userdata('uid');
+        $crea_date = date('Y-m-d H:i:s');
+        $mod_date = date('Y-m-d H:i:s');
+        $mod_by = $this->session->userdata('uid');
+        $count= $this->project_Model->count_station($id);
+        if($count==0){
+            foreach($target['station'] as $tar){
+                $res = $this->project_Model->add_update_station($id,$tar, $cre_by, $crea_date, $mod_by, $mod_date);
+            }
+            if($res){
+                redirect('project/list_project', 'refresh');
+            }
+        }
+        if($count>0){
+            $result=$this->project_Model->delete_project_station($id);
+                foreach($target['station'] as $tar){
+                    $res = $this->project_Model->add_update_station($id,$tar, $cre_by, $crea_date, $mod_by, $mod_date);
+                }
+            if($res){
+                redirect('project/list_project', 'refresh');
+            }
+        }
+
+    }
     public function delete_project(){
         $id= $this->input->post('id');
-        $this->project_Model->delete_Project($id);
+        $this->project_Model->project_delete($id);
+    }
+    public function delete_station(){
+        $id= $this->input->post('id');
+        $this->project_Model->station_delete($id);
     }
     public function update_project(){
         $id= $this->input->post('projectId');
@@ -64,5 +136,25 @@ class Project extends CI_Controller
             return false;
         }
     }
-
+    public function update_station(){
+        if($this->input->post("isActive")==1){
+            $isActive=$this->input->post("isActive");
+        }else{
+            $isActive=0;
+        }
+        $id= $this->input->post('stationId');
+        $station_name= $this->input->post("strStationName");
+        $regionId=$this->input->post("intRegionId");
+        $categoryId = $this->input->post("intCategoryId");
+        $modified_by=$this->session->userdata('uid');
+        $modified_date=date('Y-m-d H:i:s');
+        $result=$this->project_Model->update_station($id,$station_name,$regionId,$isActive,$categoryId,$modified_by,$modified_date);
+        if($result==true){
+            redirect('project/list_stations', 'refresh');
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

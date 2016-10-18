@@ -28,9 +28,9 @@ class Dataentry extends CI_Controller
         $this->load->view('template/footer');
     }
     public function list_dataentry(){
-        $data['records'] = $this->project_Model->getProject();
-        $data['journalType'] = $this->journal_model->getJournalType();
-        $data['journal'] = $this->journal_model->getJournal();
+        $data['records'] = $this->project_Model->project_get();
+        $data['journalType'] = $this->journal_model->journal_type_get();
+        $data['journal'] = $this->journal_model->journal_get();
         $this->load->view('data_entry/list_dataentry',$data);
         $this->load->view('template/footer');
     }
@@ -47,30 +47,79 @@ class Dataentry extends CI_Controller
             $parse_array = $this->parse_excel($file);
             $highestRow = $this->get_row($file);
             $id=$this->input->post("journalid");
+            $data_date=date("Y-m-d", strtotime($this->input->post("datadate")));
+            $cre_by = $this->session->userdata('uid');
+            $crea_date = date('Y-m-d H:i:s');
+            $mod_date = date('Y-m-d H:i:s');
+            $mod_by = $this->session->userdata('uid');
             $row=$this->journal_model->get_journal_name($id);
             foreach ($row as $row):
                 $journalname=$row['journal_name'];
             endforeach;
-            switch($journalname){
-                case "r1": $i = 1;
-                           while ($i <= $highestRow) {
-                                $viaduct_master_id = $parse_array[$i][0];
-                                $incident_desc = $parse_array[$i][2];
-                                $incident_date = date("Y-m-d", strtotime($parse_array[$i][1]));
-                                $data_date =date("Y-m-d", strtotime($parse_array[$i][3]));
-                                $cre_by = $this->session->userdata('uid');
-                                $crea_date = date('Y-m-d H:i:s');
-                                $mod_date = date('Y-m-d H:i:s');
-                                $mod_by = $this->session->userdata('uid');
-                                $res = $this->common_model->parse_data($viaduct_master_id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                                $i++;
-                                }if($res){
-                                    redirect('dataentry/list_dataentry', 'refresh');
-                                }else{
-                                    redirect('journal/list_journals', 'refresh');
-                                 }
+            switch( strtoupper($journalname)){
+            /*($val['INSTALL_PERCENTAGE'] == null || $val['INSTALL_PERCENTAGE'] == "") ? '' :  $val['INSTALL_PERCENTAGE']."%",*/
+                case "V1 KPI": case "V2 KPI": case "V3 KPI": case "V4 KPI": case "V5 KPI": case "V6 KPI": case "V7 KPI":$i = 2;
+                    while ($i <= $highestRow) {
+                        $kpi_type=(empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $baseline=(empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1]))? 0.00 :$parse_array[$i][1];
+                        $kpi_target=(empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2]))? 0.00 :$parse_array[$i][2];
+                        $actual=(empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3]))? 0.00 :$parse_array[$i][3];
+                        $res = $this->common_model->parse_data_kpi($id,$kpi_type,$baseline,$kpi_target,$actual, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if($res){
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }else{
+                        redirect('journal/list_journals', 'refresh');
+                    }
+                    break;
+                case "V1 KDI": case "V2 KDI":case "V3 KDI":case "V4 KDI":case "V5 KDI" : case "V6 KDI" : case "V7 KDI":$i = 2;
+                while ($i <= $highestRow) {
+                    $kd_desc=(empty($parse_array[$i][0]))? "" :$parse_array[$i][0];
+                    $forecast_date=(empty($parse_array[$i][1]))? "" :date("Y-m-d", strtotime($parse_array[$i][1]));
+                    $contract_date=(empty($parse_array[$i][2]))? "" :date("Y-m-d", strtotime($parse_array[$i][2]));
+                    $dps_date=(empty($parse_array[$i][3]))? "" :date("Y-m-d", strtotime($parse_array[$i][2]));
+                    $res = $this->common_model->parse_data_kdi($id, $data_date,$kd_desc,$forecast_date,$contract_date,$dps_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                    $i++;
+                }
+                if($res){
+                    redirect('dataentry/list_dataentry', 'refresh');
+                }else{
+                    redirect('journal/list_journals', 'refresh');
+                }
                 break;
-                default:break;
+                case "PROGRAM MASTER":$i = 2;
+                while ($i <= $highestRow) {
+                    $prgm_sub_name =(empty($parse_array[$i][0]))? "" :$parse_array[$i][0];
+                    $early_prec=(empty($parse_array[$i][1])|| !is_numeric($parse_array[$i][1]))? 0.00 :$parse_array[$i][1];
+                    $actual_prec=(empty($parse_array[$i][2])|| !is_numeric($parse_array[$i][2]))? 0.00 :$parse_array[$i][2];
+                    $late_prec=(empty($parse_array[$i][3])|| !is_numeric($parse_array[$i][3]))? 0.00 :$parse_array[$i][3];
+                    $early_varience=(empty($parse_array[$i][4])|| !is_numeric($parse_array[$i][4]))? 0.00 :$parse_array[$i][4];
+                    $late_varience=(empty($parse_array[$i][5])|| !is_numeric($parse_array[$i][5]))? 0.00 :$parse_array[$i][5];
+                    $res = $this->common_model->parse_data_project_master($id,$prgm_sub_name,$early_prec,$actual_prec,$late_prec,$early_varience,$late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                    $i++;
+                }
+                if($res){
+                    redirect('dataentry/list_dataentry', 'refresh');
+                }else{
+                    redirect('journal/list_journals', 'refresh');
+                }
+                break;
+                case "V1 SAFTY INCIDENT": case "V2 SAFTY INCIDENT":case "V3 SAFTY INCIDENT":case "V4 SAFTY INCIDENT":case "V5 SAFTY INCIDENT" : case "V6 SAFTY INCIDENT" : case "V7 SAFTY INCIDENT":$i = 1;
+                    while ($i <= $highestRow) {
+                        $incident_date=$parse_array[$i][0];
+                        $incident_desc=$parse_array[$i][1];
+                        $res = $this->common_model->parse_data_safty_incident($id, $data_date,$incident_date,$incident_desc, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if($res){
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }else{
+                        redirect('journal/list_journals', 'refresh');
+                    }
+                    break;
+                   default:redirect('journal/list_journals', 'refresh');
+                    break;
              }
 
     }

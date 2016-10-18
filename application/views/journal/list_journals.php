@@ -116,7 +116,7 @@
                                 <label for="name1" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
                                     <input type="hidden" id="journalId" name ="journalId">
-                                    <select name="intPjtId" class="form-control" id="intPjtId">
+                                    <select name="intPjtId" class="form-control" id="intPjtId" disabled>
                                         <option value="-1">Select Project</option>
                                         <?php
                                         foreach ($records as $rec):?>

@@ -19,7 +19,12 @@ class project_Model extends CI_Model {
             $this->db->insert('tbl_project_master', $data);
             return true;
     }
-    function getProject()
+    function station_add($data)
+    {
+        $this->db->insert('tbl_stations', $data);
+        return true;
+    }
+    function project_get()
     {
         $this->db->select('*');
         $this->db->from('tbl_project_master');
@@ -27,17 +32,49 @@ class project_Model extends CI_Model {
         $result = $query->result();
         return $result;
     }
-    function getCategory(){
+    function station_get()
+    {
+        $query=$this->db->query("SELECT a.category_type_name,b.spd_name,c.region_name, b.is_active,b.station_master_id,b.category_type_id,b.region_master_id,b.is_active  FROM tbl_category_type a,tbl_stations b,tbl_region_master c where a.category_type_id=b.category_type_id  and b.region_master_id=c.region_master_id order by b.station_master_id");
+        $results= $query->result_array();
+        return $results;
+    }
+    function category_get(){
         $this->db->select('*');
         $this->db->from('tbl_category_type');
         $query = $this->db->get();
         $result = $query->result();
         return $result;
     }
-    function delete_Project($id)
+    function region_get(){
+        $this->db->select('*');
+        $this->db->from('tbl_region_master');
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;
+    }
+    function project_get_station(){
+        $this->db->select('*');
+        $this->db->from('tbl_stations');
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;
+    }
+    function project_delete($id)
     {
         $this->db->where('pjct_master_id', $id);
         $this->db->delete('tbl_project_master');
+    }
+    function station_delete($id)
+    {
+        $this->db->where('station_master_id', $id);
+        $this->db->delete('tbl_stations');
+    }
+    function project_stations($id)
+    {
+        $query ="SELECT station_master_id FROM tbl_project_sub where pjct_master_id=$id";
+        $query = $this->db->query($query);
+        $query_result = $query->result();
+        return $query_result;
     }
     function update_project($id,$pjct_name,$pjct_from,$pjct_to,$pjct_desc,$cont_name,$has_parking,$has_depot,$modified_by,$modified_date)
     {
@@ -53,5 +90,36 @@ class project_Model extends CI_Model {
         $this->db->set('modified_date',$modified_date );
         $this->db->update('tbl_project_master');
         return true;
+    }
+    function update_station($id,$station_name,$regionId,$isActive,$categoryId,$modified_by,$modified_date)
+    {
+        $this->db->where('station_master_id',$id);
+        $this->db->set('spd_name',$station_name );
+        $this->db->set('category_type_id',$categoryId );
+        $this->db->set('region_master_id',$regionId );
+        $this->db->set('is_active',$isActive );
+        $this->db->set('mod_by',$modified_by );
+        $this->db->set('mod_date',$modified_date );
+        $this->db->update('tbl_stations');
+        return true;
+    }
+
+    function add_update_station($id,$tar, $cre_by, $crea_date, $mod_by, $mod_date)
+    {
+        $sql = "INSERT INTO tbl_project_sub(pjct_master_id, station_master_id, cre_by,crea_date,mod_by,mod_date) VALUES('$id','$tar','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
+    }
+
+    function count_station($id){
+        $this->db->from('tbl_project_sub');
+        $this->db->where('pjct_master_id', $id);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function delete_project_station($id)
+    {
+        $this->db->where('pjct_master_id', $id);
+        $this->db->delete('tbl_project_sub');
     }
 }

@@ -63,6 +63,11 @@
                             <span class="nav-label">Journals</span>
                         </a>
                     </li>
+                    <li class="" id="stations">
+                        <a href="<?php echo base_url('project/list_stations') ?>">
+                            <span class="nav-label">Stations</span>
+                        </a>
+                    </li>
                     <li class="" id="dataEntry">
                         <a href="<?php echo base_url('dataentry/list_dataentry') ?>">
                             <span class="nav-label">Data Entry</span>
