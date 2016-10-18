@@ -89,7 +89,7 @@
 <div class="modal fade" id="myModalImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <?php echo form_open('dataentry/doupload' , array('id' => 'validations'));?>
+            <?php echo form_open_multipart('dataentry/doupload' , array('id' => 'validations'));?>
             <!--<form method=post id=updaterecord action="<?php /*/*echo base_url(); */?>project/updateProject">-->
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -100,7 +100,7 @@
                     <div class="col-lg-12">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <input type="hidden"  name="journal_id" id="journal_id">
+                                <input type="hidden"  name="journalimage" id="journalimage">
                                 <label for="mobile1" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
                                     <label for="strPjctname" class="control-label" style="color: white" id="strImgPjctname" name="strImgPjctname"></label>
@@ -121,7 +121,7 @@
                             <div class="form-group">
                                 <label for="from_datepicker" class="col-sm-3 control-label">Data Date</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control"  id="image_datepicker" name="dateFrom">
+                                    <input type="text" class="form-control"  id="image_datepicker" name="datadateImage">
                                     <?php echo form_error('dateFrom'); ?>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
                                 --><?php /* if($success != ''){ echo "<font color='green'>$success</font>"; }*/?>
                                 <label for="mobile1" class="col-sm-3 control-label">Upload Image</label>
                                 <div class="col-sm-1" >
-                                     <input type="file" name="userFiles[]" class="form-control" id="filer_input" data-jfiler-extensions="jpg,png" multiple="multiple">
+                                     <input type="file" name="userfile[]" class="form-control" id="filer_input" data-jfiler-extensions="jpg,png" multiple="multiple">
                                      <?php echo form_error('files[]'); ?>
                                 </div>
                             </div>
@@ -281,7 +281,7 @@
             var journalId = $(this).attr("data-journalId");
             var journalName = $(this).attr("data-journalName");
            /* var journalType = $(this).attr("data-journalType");*/
-            $('#journalid').val( journalId );
+            $('#journalimage').val( journalId );
             $('#strImgPjctname').text(projectName) ;
             $('#strImgJournalName').text( journalName );
             /*$('#strImgJournalType').text( journalType );*/

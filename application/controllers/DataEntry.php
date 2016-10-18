@@ -166,8 +166,61 @@ class Dataentry extends CI_Controller
         }
         return $val;
     }
-    public function doupload() {
 
+    public function doupload() {
+        $this->load->library('upload');
+        $files = $_FILES;
+        $cpt = count($_FILES['userfile']['name']);
+        $id=$this->input->post("journalimage");
+        $data_date=date("Y-m-d", strtotime($this->input->post("datadateImage")));
+        $userid = $this->session->userdata('uid');
+        $chk=0;
+        for($i=0; $i<$cpt; $i++)
+        {
+            $_FILES['userfile']['name']= $files['userfile']['name'][$i];
+            $_FILES['userfile']['type']= $files['userfile']['type'][$i];
+            $_FILES['userfile']['tmp_name']= $files['userfile']['tmp_name'][$i];
+            $_FILES['userfile']['error']= $files['userfile']['error'][$i];
+            $_FILES['userfile']['size']= $files['userfile']['size'][$i];
+            // check whether there is a folder in the document root if not create
+            if (!is_dir('journalimage')) {
+                mkdir('./journalimage', 0777, true);
+            }
+            if (!is_dir('journalimage/'.$id)) {
+                mkdir('./journalimage/'.$id, 0777, true);
+            }
+            if (!is_dir('journalimage/'.$id.'/'.$data_date)) {
+                mkdir('./journalimage/'.$id.'/'.$data_date, 0777, true);
+            }
+            $config['upload_path'] = 'journalimage/'.$id.'/'.$data_date.'/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size']      = '0';
+            $config['overwrite']     = FALSE;
+            $this->upload->initialize($config);
+            if($this->upload->do_upload()){
+                $filedetails=$this->upload->data();
+                $data = array('journal_master_id' => $id,'image_name' => $filedetails['file_name'],'image_path' => '/journalimage/'.$id.'/'.$data_date.'/','data_date' =>$data_date,'crea_date' => date('Y-m-d H:i:s'),'mod_date' => date('Y-m-d H:i:s'),'cre_by'=>$userid,'mod_by'=>$userid);
+                $this->common_model->image_upload($data);
+                $chk=1;
+            }
+        }
+        if($chk==1){
+            redirect('dataentry/list_dataentry', 'refresh');
+        }
+    }
+
+
+   /* public function doupload() {
+            $id=$this->input->post("journalimage");
+            $data_date=date("Y-m-d", strtotime($this->input->post("datadate")));
+            $cre_by = $this->session->userdata('uid');
+            $crea_date = date('Y-m-d H:i:s');
+            $mod_date = date('Y-m-d H:i:s');
+            $mod_by = $this->session->userdata('uid');
+            $row=$this->journal_model->get_journal_name($id);
+            foreach ($row as $row):
+                $journalname=$row['journal_name'];
+            endforeach;
         $root = $_SERVER['DOCUMENT_ROOT'];
         $name;
         $temp;
@@ -186,44 +239,35 @@ class Dataentry extends CI_Controller
                 $_FILES['userFile']['tmp_name'] = $_FILES['userFiles']['tmp_name'][$i];
                 $_FILES['userFile']['error'] = $_FILES['userFiles']['error'][$i];
                 $_FILES['userFile']['size'] = $_FILES['userFiles']['size'][$i];
-                // echo '<pre>';
-                // print_r($name[0]);
-                // echo '</pre>';
                 $name = explode('.', $_FILES['userFiles']['name'][$i]);
                 $temp = explode('_', $name[0]);
                 $album = $temp[0];
                 $date = $temp[1];
                 $desc = $temp[2];
-                // print "$album <br />";
-                // print "$date <br />" ;
-                // print "$desc <br />" ;
-
                 // check whether there is a folder in the document root if not create
-                if (!is_dir($root.'/'.'gallery'))
-                {
+                if (!is_dir($root.'/'.'gallery')) {
                     mkdir($root.'/'.'gallery', 0777, true);
                 }
-
                 // check whether there is a folder for album inside the gallery if not create
-                if (!is_dir($root.'/'.'gallery'.'/'.$album))
-                {
+                if (!is_dir($root.'/'.'gallery'.'/'.$album)) {
                     mkdir($root.'/'.'gallery'.'/'.$album, 0777, true);
                 }
                 // check whether there is a folder for date inside the album if not create
-                if (!is_dir($root.'/'.'gallery'.'/'.$album.'/'.$date))
-                {
+                if (!is_dir($root.'/'.'gallery'.'/'.$album.'/'.$date)) {
                     mkdir($root.'/'.'gallery'.'/'.$album.'/'.$date, 0777, true);
                 }
-
                 $uploadPath = $root.'/'.'gallery'.'/'.$album.'/'.$date;
                 $config['upload_path'] = $uploadPath;
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
-
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
-                if(!$this->upload->do_upload('userFile'))
+                if($this->upload->do_upload('userFile'))
                 {
-                    $chk = 1;
+                    $filedetails=$this->upload->data();
+                    $data = array('data_entry_no' => $id,'pict_file_name' => $filedetails['file_name'],'pict_file_path' => '/journalimagenonp/'.$id.'/'.$userid.'/','pict_definition' => $this->input->post('imagedesc'),'pict_user_id' => $userid,'data_source' => '1');
+                    $this->assessment->add_journal_data_entry_picturenonp($data);
+                    $chk == 1;
+
                 }
             }
             if($chk == 1)
@@ -241,7 +285,7 @@ class Dataentry extends CI_Controller
             // throw server side error
         }
 
-    }
+    }*/
 }
     /* for ($x = 1; $x <= $r; $x++) {
                $a=array();

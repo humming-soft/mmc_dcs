@@ -151,6 +151,6 @@ class Common_model extends CI_Model
      */
     public function image_upload($data)
     {
-        return $this->db->insert('users_log', $data);
+        return $this->db->insert('tbl_album_master', $data);
     }
 }

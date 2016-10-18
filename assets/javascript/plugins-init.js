@@ -19,6 +19,7 @@ $(".data-attributes span").peity("donut");
     if ($('.select2-input').length === 0) {
         return;
     }
+
     $('.select2-input').on( "select2:open", function() {
         if ( $( this ).parents( "[class*='has-']" ).length ) {
             var classNames = $( this ).parents( "[class*='has-']" )[ 0 ].className.split( /\s+/ );
