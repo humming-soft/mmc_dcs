@@ -35,8 +35,10 @@ class Journal extends CI_Controller
         $data = array('pjct_master_id' =>$this->input->post("intPjtId"),'journal_name' =>$this->input->post("strJournal"),'journal_type_id' => $this->input->post("intJournalType"),'cre_by' => $this->session->userdata('uid'),'cre_date' => $date1,'mod_by'=>$this->session->userdata('uid'),'mod_date' => $date1);
         $result = $this->journal_model->journal_add($data);
         if($result==true){
+            $this->session->set_flashdata('success', $this->input->post("strJournal") . ' successfully added ');
             redirect('journal/list_journals', 'refresh');
         }else{
+            $this->session->set_flashdata('error', 'project not added.');
             redirect('journal/add_journal', 'refresh');
         }
     }
@@ -46,14 +48,25 @@ class Journal extends CI_Controller
         $jrnl_type = $this->input->post("intJournalType");
         $result=$this->journal_model->update_journal($id,$jrnl_name,$jrnl_type);
         if($result==true){
+            $this->session->set_flashdata('success', $this->input->post("strJournal") . ' successfully updated');
             redirect('journal/list_journals', 'refresh');
         }else{
+            $this->session->set_flashdata('error', $this->input->post("strJournal") .'  updation is failed.');
             redirect('journal/add_journal', 'refresh');
         }
     }
     public function delete_journal(){
         $id= $this->input->post('id');
-        $this->journal_model->delete_journal($id);
+        $row=$this->journal_model->get_journal_name($id);
+        foreach ($row as $row):
+            $journalname=trim($row['journal_name']);
+        endforeach;
+        $result=$this->journal_model->delete_journal($id);
+        if($this->journal_model->count_journal_id($id)==0){
+            $this->session->set_flashdata('success', $journalname . ' details successfully deleted ');
+        }else{
+            $this->session->set_flashdata('error', ' deletion  is failed.');
+        }
     }
 
 }

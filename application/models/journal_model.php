@@ -54,4 +54,11 @@ class journal_model extends CI_Model {
        return $result;
 
     }
+    function count_journal_id($id){
+        $this->db->from('tbl_journal_master');
+        $this->db->where('journal_master_id', $id);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
 }

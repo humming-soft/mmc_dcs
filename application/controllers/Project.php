@@ -55,13 +55,21 @@ class Project extends CI_Controller
     }
     public function add_new_project()
     {
-        $data = array('pjct_name' =>$this->input->post("strProjectName"),'pjct_desc' =>$this->input->post("strProjectDesc"),'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))),'pjct_to'=>date("Y-m-d", strtotime($this->input->post("dateTo"))),'cont_name'=>$this->input->post("strContractName"),'has_parking'=>$this->input->post("intParking"),'has_depot'=>$this->input->post("intDepot"), 'created_by' =>$this->session->userdata('uid'),'created_date'=>date('Y-m-d H:i:s'),'modified_by'=>$this->session->userdata('uid'), 'modified_date'=>date('Y-m-d H:i:s'));
-        $result = $this->project_Model->project_add($data);
-        if($result==true){
-            redirect('project/list_project', 'refresh');
-        }else{
+        $count= $this->project_Model->count_project($this->input->post("strProjectName"));
+        if($count>0){
+            $this->session->set_flashdata('error', ' Project name is already existed.');
             $this->load->view('project/add_project');
             $this->load->view('template/footer');
+        }else {
+            $data = array('pjct_name' => $this->input->post("strProjectName"), 'pjct_desc' => $this->input->post("strProjectDesc"), 'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))), 'pjct_to' => date("Y-m-d", strtotime($this->input->post("dateTo"))), 'cont_name' => $this->input->post("strContractName"), 'has_parking' => $this->input->post("intParking"), 'has_depot' => $this->input->post("intDepot"), 'created_by' => $this->session->userdata('uid'), 'created_date' => date('Y-m-d H:i:s'), 'modified_by' => $this->session->userdata('uid'), 'modified_date' => date('Y-m-d H:i:s'));
+            $result = $this->project_Model->project_add($data);
+            if ($result == true) {
+                $this->session->set_flashdata('success', $this->input->post("strProjectName") . ' successfully added ');
+                redirect('project/list_project', 'refresh');
+            } else {
+                $this->session->set_flashdata('error', 'project not added.');
+                redirect('project/list_project', 'refresh');
+            }
         }
     }
     public function add_new_station()
@@ -74,8 +82,10 @@ class Project extends CI_Controller
         $data = array('spd_name' =>$this->input->post("strStationName"),'region_master_id' =>$this->input->post("intRegionId"),'category_type_id' => $this->input->post("intCategoryId"),'is_active'=>$isActive, 'cre_by' =>$this->session->userdata('uid'), 'crea_date'=>date('Y-m-d H:i:s'),'mod_by'=>$this->session->userdata('uid'), 'mod_date'=>date('Y-m-d H:i:s'));
         $result = $this->project_Model->station_add($data);
         if($result==true){
+            $this->session->set_flashdata('success', $this->input->post("strStationName") . ' successfully added ');
             redirect('project/list_stations', 'refresh');
         }else{
+            $this->session->set_flashdata('error', 'station is not added.');
             $this->load->view('project/add_stations');
             $this->load->view('template/footer');
         }
@@ -88,12 +98,17 @@ class Project extends CI_Controller
         $crea_date = date('Y-m-d H:i:s');
         $mod_date = date('Y-m-d H:i:s');
         $mod_by = $this->session->userdata('uid');
+        $row=$this->project_Model->get_project($id);
+        foreach ($row as $row):
+            $projname=trim($row['pjct_name']);
+        endforeach;
         $count= $this->project_Model->count_station($id);
         if($count==0){
             foreach($target['station'] as $tar){
                 $res = $this->project_Model->add_update_station($id,$tar, $cre_by, $crea_date, $mod_by, $mod_date);
             }
             if($res){
+                $this->session->set_flashdata('success',' stations are successfully added  into project  '.$projname );
                 redirect('project/list_project', 'refresh');
             }
         }
@@ -103,6 +118,7 @@ class Project extends CI_Controller
                     $res = $this->project_Model->add_update_station($id,$tar, $cre_by, $crea_date, $mod_by, $mod_date);
                 }
             if($res){
+                $this->session->set_flashdata('success', $projname.'  stations are successfully updated ');
                 redirect('project/list_project', 'refresh');
             }
         }
@@ -110,11 +126,29 @@ class Project extends CI_Controller
     }
     public function delete_project(){
         $id= $this->input->post('id');
-        $this->project_Model->project_delete($id);
+        $row=$this->project_Model->get_project_name($id);
+        foreach ($row as $row):
+            $projectname=trim($row['pjct_name']);
+        endforeach;
+        $result=$this->project_Model->project_delete($id);
+        if($this->project_Model->count_project_id($id)==0){
+            $this->session->set_flashdata('success', $projectname . ' details successfully deleted ');
+        }else{
+            $this->session->set_flashdata('error', ' deletion  is failed.');
+        }
     }
     public function delete_station(){
         $id= $this->input->post('id');
-        $this->project_Model->station_delete($id);
+        $row=$this->project_Model->get_station_name($id);
+        foreach ($row as $row):
+            $stationname=trim($row['spd_name']);
+        endforeach;
+        $result=$this->project_Model->station_delete($id);
+        if($this->project_Model->count_station_id($id)==0){
+            $this->session->set_flashdata('success', $stationname. ' details successfully deleted ');
+        }else{
+            $this->session->set_flashdata('error', ' deletion  is failed.');
+        }
     }
     public function update_project(){
         $id= $this->input->post('projectId');
@@ -129,11 +163,13 @@ class Project extends CI_Controller
         $modified_date=date('Y-m-d H:i:s');
         $result=$this->project_Model->update_project($id,$pjct_name,$pjct_from,$pjct_to,$pjct_desc,$cont_name,$has_parking,$has_depot,$modified_by,$modified_date);
         if($result==true){
+            $this->session->set_flashdata('success', $this->input->post("strProjectName") . ' details successfully updated ');
             redirect('project/list_project', 'refresh');
         }
         else
         {
-            return false;
+            $this->session->set_flashdata('error', ' updation is failed.');
+            redirect('project/list_project', 'refresh');
         }
     }
     public function update_station(){
@@ -150,11 +186,13 @@ class Project extends CI_Controller
         $modified_date=date('Y-m-d H:i:s');
         $result=$this->project_Model->update_station($id,$station_name,$regionId,$isActive,$categoryId,$modified_by,$modified_date);
         if($result==true){
+            $this->session->set_flashdata('success', $this->input->post("strStationName") . ' details successfully updated ');
             redirect('project/list_stations', 'refresh');
         }
         else
         {
-            return false;
+            $this->session->set_flashdata('error', ' updation is failed.');
+            redirect('project/list_stations', 'refresh');
         }
     }
 }

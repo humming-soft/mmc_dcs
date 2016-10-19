@@ -44,7 +44,18 @@
 
     <div class="container">
         <!-- START EDIT CONTENT -->
-
+        <?php if($this->session->flashdata('success')){ ?>
+            <div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
+                <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
+            </div>
+        <?php } ;?>
+        <?php  if($this->session->flashdata('error')){ ?>
+            <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
+                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
+            </div>
+        <?php } ;?>
         <div class="row">
             <div class="col-lg-12">
                 <!-- START Basic Elements -->

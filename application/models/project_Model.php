@@ -117,9 +117,51 @@ class project_Model extends CI_Model {
         $rowcount = $query->num_rows();
         return $rowcount;
     }
+    function count_project($name){
+        $this->db->from('tbl_project_master');
+        $this->db->where('pjct_name', $name);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function count_project_id($id){
+        $this->db->from('tbl_project_master');
+        $this->db->where('pjct_master_id', $id);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function count_station_id($id){
+        $this->db->from('tbl_stations');
+        $this->db->where('station_master_id', $id);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function get_project($id)
+    {
+        $query=$this->db->query("SELECT pjct_name FROM tbl_project_master where pjct_master_id=$id");
+        $result= $query->result_array();
+        return $result;
+
+    }
     function delete_project_station($id)
     {
         $this->db->where('pjct_master_id', $id);
         $this->db->delete('tbl_project_sub');
+    }
+    function get_project_name($id)
+    {
+        $query=$this->db->query("SELECT pjct_name FROM tbl_project_master where pjct_master_id=(SELECT pjct_master_id FROM tbl_journal_master where journal_master_id=$id)");
+        $result= $query->result_array();
+        return $result;
+
+    }
+    function get_station_name($id)
+    {
+        $query=$this->db->query("SELECT spd_name FROM tbl_stations where station_master_id=$id");
+        $result= $query->result_array();
+        return $result;
+
     }
 }

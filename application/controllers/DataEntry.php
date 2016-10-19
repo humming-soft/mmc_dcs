@@ -174,7 +174,12 @@ class Dataentry extends CI_Controller
         $id=$this->input->post("journalimage");
         $data_date=date("Y-m-d", strtotime($this->input->post("datadateImage")));
         $userid = $this->session->userdata('uid');
+        $row=$this->project_Model->get_project_name($id);
+        foreach ($row as $row):
+            $projectname=trim($row['pjct_name']);
+        endforeach;
         $chk=0;
+        $count=0;
         for($i=0; $i<$cpt; $i++)
         {
             $_FILES['userfile']['name']= $files['userfile']['name'][$i];
@@ -182,33 +187,55 @@ class Dataentry extends CI_Controller
             $_FILES['userfile']['tmp_name']= $files['userfile']['tmp_name'][$i];
             $_FILES['userfile']['error']= $files['userfile']['error'][$i];
             $_FILES['userfile']['size']= $files['userfile']['size'][$i];
+            $array = explode('_', $_FILES['userfile']['name']);
+            if(sizeof($array)==3){
+                $project = (empty($array[0])) ? "" : trim($array[0]);
+                $array2 = explode('.',$array[2]);
+                $description = (empty($array2[0])) ? "" : $array2[0];
+                if (strlen(substr($array[1], 0, 2)) == 2 && strlen(substr($array[1], 2, 2)) == 2 && strlen(substr($array[1], 4, 4)) == 4 && is_numeric(substr($array[1], 0, 2)) && is_numeric(substr($array[1], 2, 2)) && is_numeric(substr($array[1], 4, 4))) {
+                    $uploaddate = (empty($array[1])) ? "" : date("Y-m-d", strtotime(substr($array[1], 0, 2) . '-' . substr($array[1], 2, 2) . '-' . substr($array[1], 4, 4)));
+                } else {
+                    $uploaddate = "";
+                }
+            }else{
+                $project="";
+                $description="";
+                $uploaddate="";
+            }
             // check whether there is a folder in the document root if not create
-            if (!is_dir('journalimage')) {
-                mkdir('./journalimage', 0777, true);
+            if (!is_dir('gallery')) {
+                mkdir('./gallery', 0777, true);
             }
-            if (!is_dir('journalimage/'.$id)) {
-                mkdir('./journalimage/'.$id, 0777, true);
+            if (!is_dir('gallery/'.$id)) {
+                mkdir('./gallery/'.$id, 0777, true);
             }
-            if (!is_dir('journalimage/'.$id.'/'.$data_date)) {
-                mkdir('./journalimage/'.$id.'/'.$data_date, 0777, true);
+            if (!is_dir('gallery/'.$id.'/'.$data_date)) {
+                mkdir('./gallery/'.$id.'/'.$data_date, 0777, true);
             }
-            $config['upload_path'] = 'journalimage/'.$id.'/'.$data_date.'/';
+            $config['upload_path'] = 'gallery/'.$id.'/'.$data_date.'/';
             $config['allowed_types'] = 'gif|jpg|png';
             $config['max_size']      = '0';
             $config['overwrite']     = FALSE;
             $this->upload->initialize($config);
-            if($this->upload->do_upload()){
-                $filedetails=$this->upload->data();
-                $data = array('journal_master_id' => $id,'image_name' => $filedetails['file_name'],'image_path' => '/journalimage/'.$id.'/'.$data_date.'/','data_date' =>$data_date,'crea_date' => date('Y-m-d H:i:s'),'mod_date' => date('Y-m-d H:i:s'),'cre_by'=>$userid,'mod_by'=>$userid);
-                $this->common_model->image_upload($data);
-                $chk=1;
+            if(strcasecmp($projectname,$project)==0){
+                if($this->upload->do_upload()){
+                    $filedetails=$this->upload->data();
+                    $data = array('journal_master_id' => $id,'image_name' => $filedetails['file_name'],'image_path' => $filedetails['file_path'],'image_desc'=>$description,'image_upload_date'=>$uploaddate,'data_date' =>$data_date,'crea_date' => date('Y-m-d H:i:s'),'mod_date' => date('Y-m-d H:i:s'),'cre_by'=>$userid,'mod_by'=>$userid);
+                    $this->common_model->image_upload($data);
+                    $count++;
+                    $chk=1;
+                }
             }
         }
         if($chk==1){
+            $this->session->set_flashdata('success', $count."  picture(s) attached with journal.");
+            redirect('dataentry/list_dataentry', 'refresh');
+        }else{
+            $this->session->set_flashdata('error', 'Picture not uploaded.');
             redirect('dataentry/list_dataentry', 'refresh');
         }
     }
-
+}
 
    /* public function doupload() {
             $id=$this->input->post("journalimage");
@@ -286,7 +313,7 @@ class Dataentry extends CI_Controller
         }
 
     }*/
-}
+
     /* for ($x = 1; $x <= $r; $x++) {
                $a=array();
                foreach ($cell_collection as $cell) {
