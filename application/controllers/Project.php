@@ -55,13 +55,14 @@ class Project extends CI_Controller
     }
     public function add_new_project()
     {
-        $count= $this->project_Model->count_project($this->input->post("strProjectName"));
+        $projrctname=strtoupper(trim($this->input->post("strProjectName")));
+        $count= $this->project_Model->count_project($projrctname);
         if($count>0){
             $this->session->set_flashdata('error', ' Project name is already existed.');
             $this->load->view('project/add_project');
             $this->load->view('template/footer');
         }else {
-            $data = array('pjct_name' => $this->input->post("strProjectName"), 'pjct_desc' => $this->input->post("strProjectDesc"), 'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))), 'pjct_to' => date("Y-m-d", strtotime($this->input->post("dateTo"))), 'cont_name' => $this->input->post("strContractName"), 'has_parking' => $this->input->post("intParking"), 'has_depot' => $this->input->post("intDepot"), 'created_by' => $this->session->userdata('uid'), 'created_date' => date('Y-m-d H:i:s'), 'modified_by' => $this->session->userdata('uid'), 'modified_date' => date('Y-m-d H:i:s'));
+            $data = array('pjct_name' => $projrctname, 'pjct_desc' => $this->input->post("strProjectDesc"), 'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))), 'pjct_to' => date("Y-m-d", strtotime($this->input->post("dateTo"))), 'cont_name' => $this->input->post("strContractName"), 'has_parking' => $this->input->post("intParking"), 'has_depot' => $this->input->post("intDepot"), 'created_by' => $this->session->userdata('uid'), 'created_date' => date('Y-m-d H:i:s'), 'modified_by' => $this->session->userdata('uid'), 'modified_date' => date('Y-m-d H:i:s'));
             $result = $this->project_Model->project_add($data);
             if ($result == true) {
                 $this->session->set_flashdata('success', $this->input->post("strProjectName") . ' successfully added ');
@@ -126,7 +127,7 @@ class Project extends CI_Controller
     }
     public function delete_project(){
         $id= $this->input->post('id');
-        $row=$this->project_Model->get_project_name($id);
+        $row=$this->project_Model->get_project($id);
         foreach ($row as $row):
             $projectname=trim($row['pjct_name']);
         endforeach;

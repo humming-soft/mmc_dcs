@@ -189,7 +189,7 @@ class Dataentry extends CI_Controller
             $_FILES['userfile']['size']= $files['userfile']['size'][$i];
             $array = explode('_', $_FILES['userfile']['name']);
             if(sizeof($array)==3){
-                $project = (empty($array[0])) ? "" : trim($array[0]);
+                $project = (empty($array[0])) ? "" : strtoupper(trim($array[0]));
                 $array2 = explode('.',$array[2]);
                 $description = (empty($array2[0])) ? "" : $array2[0];
                 if (strlen(substr($array[1], 0, 2)) == 2 && strlen(substr($array[1], 2, 2)) == 2 && strlen(substr($array[1], 4, 4)) == 4 && is_numeric(substr($array[1], 0, 2)) && is_numeric(substr($array[1], 2, 2)) && is_numeric(substr($array[1], 4, 4))) {
