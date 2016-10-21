@@ -89,6 +89,7 @@
                         allowOutsideClick: false
                     });
                 </script>
+
             <?php } ;?>
             <div class="row">
                 <div class="col-lg-12">
