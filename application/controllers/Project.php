@@ -74,20 +74,30 @@ class Project extends CI_Controller
     }
     public function add_new_station()
     {
-        if($this->input->post("isActive")==1){
-            $isActive=$this->input->post("isActive");
-        }else{
-            $isActive=0;
+        $this->load->helper(array('form'));
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('strStationName', 'station name ', 'trim|required|min_length[2]|max_length[80]');
+        $this->form_validation->set_rules('intRegionId', 'Region','required');
+        $this->form_validation->set_rules('intCategoryId', 'Category','required');
+        if ($this->form_validation->run() == FALSE) {
+            $this->add_station();
         }
-        $data = array('spd_name' =>$this->input->post("strStationName"),'region_master_id' =>$this->input->post("intRegionId"),'category_type_id' => $this->input->post("intCategoryId"),'is_active'=>$isActive, 'cre_by' =>$this->session->userdata('uid'), 'crea_date'=>date('Y-m-d H:i:s'),'mod_by'=>$this->session->userdata('uid'), 'mod_date'=>date('Y-m-d H:i:s'));
-        $result = $this->project_Model->station_add($data);
-        if($result==true){
-            $this->session->set_flashdata('success', $this->input->post("strStationName") . ' successfully added ');
-            redirect('project/list_stations', 'refresh');
-        }else{
-            $this->session->set_flashdata('error', 'station is not added.');
-            $this->load->view('project/add_stations');
-            $this->load->view('template/footer');
+        else {
+            if($this->input->post("isActive")==1){
+                $isActive=$this->input->post("isActive");
+            }else{
+                $isActive=0;
+            }
+            $data = array('spd_name' =>$this->input->post("strStationName"),'region_master_id' =>$this->input->post("intRegionId"),'category_type_id' => $this->input->post("intCategoryId"),'is_active'=>$isActive, 'cre_by' =>$this->session->userdata('uid'), 'crea_date'=>date('Y-m-d H:i:s'),'mod_by'=>$this->session->userdata('uid'), 'mod_date'=>date('Y-m-d H:i:s'));
+            $result = $this->project_Model->station_add($data);
+            if($result==true){
+                $this->session->set_flashdata('success', $this->input->post("strStationName") . ' successfully added ');
+                redirect('project/list_stations', 'refresh');
+            }else{
+                $this->session->set_flashdata('error', 'station is not added.');
+                $this->load->view('project/add_stations');
+                $this->load->view('template/footer');
+            }
         }
     }
     public function add_update_station()

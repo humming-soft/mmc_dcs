@@ -63,21 +63,32 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
                 <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
             </div>-->
+            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
             <script type="text/javascript">
                     swal({
                         title: 'Success!',
-                        text: 'Journal succesfully added',
-                        type: 'success',
+                        text:  document.getElementById("message").value+ '.',
+                        type:   'success',
                         allowEscapeKey: false,
                         allowOutsideClick: false
                     });
             </script>
             <?php } ;?>
             <?php  if($this->session->flashdata('error')){ ?>
-            <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
+           <!-- <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
-            </div>
+                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php /*echo $this->session->flashdata('error'); */?>.</span>
+            </div>-->
+                <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+                <script type="text/javascript">
+                    swal({
+                        title: 'Sorry!',
+                        text:  document.getElementById("message").value+ '.',
+                        type:   'error',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false
+                    });
+                </script>
             <?php } ;?>
             <div class="row">
                 <div class="col-lg-12">
