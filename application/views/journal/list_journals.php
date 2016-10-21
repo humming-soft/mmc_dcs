@@ -64,20 +64,30 @@
                 <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
             </div>-->
             <script type="text/javascript">
-                    swal({
-                        title: 'Success!',
-                        text: 'Journal succesfully added',
-                        type: 'success',
-                        allowEscapeKey: false,
-                        allowOutsideClick: false
-                    });
+            var chk = <?php echo $_SESSION['success'];?>;
+                swal({
+                    title: 'Success!',
+                    text: chk,
+                    type: 'success',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
             </script>
             <?php } ;?>
             <?php  if($this->session->flashdata('error')){ ?>
-            <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
+<!--             <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
                 <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
-            </div>
+            </div> -->
+            <script type="text/javascript">
+                swal({
+                    title: 'Error!',
+                    text: 'Mes',
+                    type: 'error',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            </script>
             <?php } ;?>
             <div class="row">
                 <div class="col-lg-12">
