@@ -58,31 +58,34 @@
 
     <div class="container">
         <!-- START EDIT CONTENT -->
-        <?php if($this->session->flashdata('success')){ ?>
+        <?php if($this->session->flashdata('success')){ 
+            $success = $this->session->flashdata('success');
+            ?>
             <!--<div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
                 <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
             </div>-->
             <script type="text/javascript">
-            var chk = <?php echo $_SESSION['success'];?>;
                 swal({
                     title: 'Success!',
-                    text: chk,
+                    text: '<?php echo $success; ?>',
                     type: 'success',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
             <?php } ;?>
-            <?php  if($this->session->flashdata('error')){ ?>
-<!--             <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
+            <?php  if($this->session->flashdata('error')){
+                $error = $this->session->flashdata('error');
+                ?>
+            <!--<div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
                 <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
             </div> -->
             <script type="text/javascript">
                 swal({
                     title: 'Error!',
-                    text: 'Mes',
+                    text: '<?php echo $error; ?>',
                     type: 'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false
@@ -112,7 +115,7 @@
                                 <td class="text-center v-a-m">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-journalId="<?php echo $journal['journal_master_id']; ?>" data-status="<?php echo $journal['journal_status']; ?>"  data-category="<?php echo $journal['journal_category_id'];?>" data-projectId="<?php echo $journal['pjct_master_id']; ?>" data-journalName="<?php echo $journal['journal_name'] ?>" data-typeId="<?php echo $journal['journal_type_id']; ?>" ><span class="glyphicon glyphicon-edit">&nbsp;</span></a>
-                                        <a href="javascript:;" id="showtoaster" class="modaldelete" data-journalId="<?php echo $journal['journal_master_id']; ?>" data-status="<?php echo $journal['journal_status']; ?>"  ><span class="glyphicon glyphicon-trash">&nbsp;</span></a>
+                                        <a href="javascript:;" id="showtoaster" class="modaldelete" data-journalId="<?php echo $journal['journal_master_id']; ?>" data-status="<?php echo $journal['journal_status']; ?>" data-journalName="<?php echo $journal['journal_name'] ?>"  ><span class="glyphicon glyphicon-trash">&nbsp;</span></a>
                                     </div>
                                 </td>
                             </tr>
@@ -289,13 +292,39 @@
         showDropdowns: true
     });
     $(".modaldelete").click(function(){
-        if(confirm("Do you want to delete?"))
-        {
-            var id = $(this).attr("data-journalId");
-            $.post( "<?php echo base_url(); ?>journal/delete_journal",{id:id}, function( data ) {
-                location.reload();
-            });
+        var id = $(this).attr("data-journalId");
+        var str1 = "Journal ";
+        var jname = $(this).attr("data-journalName");
+        var str3 = " is safe :)";
+        var res = str1.concat(jname,str3); 
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            type: "warning",
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            closeOnCancel: false 
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $.post( "<?php echo base_url(); ?>journal/delete_journal",{id:id}, function( data ) {
+                    location.reload();
+                });
+            } else {
+                swal({
+                    title: 'Error!',
+                    text: res,
+                    type: 'error',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            }
         }
+        );
     });
    /* $(".modaldelete").click(function(){
         var id = $(this).attr("data-journalId");

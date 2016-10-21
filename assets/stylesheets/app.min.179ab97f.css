@@ -315,7 +315,7 @@ h2,h3{page-break-after:avoid}
 html{font-size:10px;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,"Helvetica Neue",Helvetica,"Segoe UI",Arial,sans-serif;font-size:13px;line-height:1.52857;color:#5c5c5c}
 button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}
-a{color:#2c97de;text-decoration:none}
+a{color:#2c97de;text-decoration:none;}
 a:focus,a:hover{color:#1a6da4;text-decoration:underline}
 a:focus{outline:-webkit-focus-ring-color auto 5px;outline-offset:-2px}
 figure{margin:0}

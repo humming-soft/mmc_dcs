@@ -36,10 +36,10 @@ class Journal extends CI_Controller
         $data = array('pjct_master_id' =>$this->input->post("intPjtId"),'journal_name' =>$this->input->post("strJournal"),'journal_type_id' => $this->input->post("intJournalType"),'journal_category_id'=>$this->input->post("intCatId"),'journal_status'=>0,'cre_by' => $this->session->userdata('uid'),'cre_date' => date('Y-m-d H:i:s'),'mod_by'=>$this->session->userdata('uid'),'mod_date' => date('Y-m-d H:i:s'));
         $result = $this->journal_model->journal_add($data);
         if($result==true){
-            $this->session->set_flashdata('success', $this->input->post("strJournal") . ' successfully added ');
+            $this->session->set_flashdata('success', 'Journal '. $this->input->post("strJournal") . ' successfully added ');
             redirect('journal/list_journals', 'refresh');
         }else{
-            $this->session->set_flashdata('error', 'project not added.');
+            $this->session->set_flashdata('error', 'Journal not added.');
             redirect('journal/add_journal', 'refresh');
         }
     }
@@ -55,10 +55,10 @@ class Journal extends CI_Controller
             $result=$this->journal_model->update_journal($id,$this->input->post("strJournal"));
         }
         if($result==true){
-            $this->session->set_flashdata('success', $this->input->post("strJournal") . ' successfully updated');
+            $this->session->set_flashdata('success','Journal '. $this->input->post("strJournal") . ' successfully updated');
             redirect('journal/list_journals', 'refresh');
         }else{
-            $this->session->set_flashdata('error', $this->input->post("strJournal") .'  updation is failed.');
+            $this->session->set_flashdata('error','Journal '. $this->input->post("strJournal") .'  updation failed.');
             redirect('journal/add_journal', 'refresh');
         }
     }
@@ -70,9 +70,9 @@ class Journal extends CI_Controller
         endforeach;
         $result=$this->journal_model->delete_journal($id);
         if($this->journal_model->count_journal_id($id)==0){
-            $this->session->set_flashdata('success', $journalname . ' details successfully deleted ');
+            $this->session->set_flashdata('success','Journal '. $journalname . ' details successfully deleted ');
         }else{
-            $this->session->set_flashdata('error', ' deletion  is failed.');
+            $this->session->set_flashdata('error', 'Journal '. $journalname .' deletion failed.');
         }
     }
 }
