@@ -6,6 +6,7 @@
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
 <!-- end: Javascript for validation-->
+
 <div class="content">
 <!-- START Sub-Navbar with Header only-->
 <div class="sub-navbar sub-navbar__header">

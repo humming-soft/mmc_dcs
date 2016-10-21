@@ -5,7 +5,8 @@
 <script src="<?php echo base_url(); ?>assets/vendor/js/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
-
+<script src="<?php echo base_url(); ?>assets/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dist/sweetalert.css">
 <!-- end: Javascript for validation-->
 <div class="content">
     <!-- START Sub-Navbar with Header only-->
@@ -91,8 +92,8 @@
                             <td class="text-white"><?php echo $journal['journal_type_name']; ?></td>
                             <td class="text-center v-a-m">
                                 <div class="btn-group" role="group" aria-label="...">
-                                    <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-journalId="<?php echo $journal['journal_master_id']; ?>" data-projectId="<?php echo $journal['pjct_master_id']; ?>" data-journalName="<?php echo $journal['journal_name'] ?>" data-typeId="<?php echo $journal['journal_type_id']; ?>" ><span class="glyphicon glyphicon-edit">&nbsp;</span></a>
-                                    <a href="" data-toggle="modal" class="modaldelete" data-journalId="<?php echo $journal['journal_master_id']; ?>"><span class="glyphicon glyphicon-trash">&nbsp;</span></a>
+                                    <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-journalId="<?php echo $journal['journal_master_id']; ?>" data-status="<?php echo $journal['journal_status']; ?>"  data-category="<?php echo $journal['journal_category_id'];?>" data-projectId="<?php echo $journal['pjct_master_id']; ?>" data-journalName="<?php echo $journal['journal_name'] ?>" data-typeId="<?php echo $journal['journal_type_id']; ?>" ><span class="glyphicon glyphicon-edit">&nbsp;</span></a>
+                                    <a href="javascript:;" id="showtoaster" class="modaldelete" data-journalId="<?php echo $journal['journal_master_id']; ?>" data-status="<?php echo $journal['journal_status']; ?>"  ><span class="glyphicon glyphicon-trash">&nbsp;</span></a>
                                 </div>
                             </td>
                         </tr>
@@ -112,8 +113,6 @@
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <?php echo form_open('journal/update_journal' , array('id' => 'validations'));?>
-            <!--<form method=post id=updaterecord action="<?php /*/*echo base_url(); */?>project/updateProject">-->
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Edit The Journal Details</h4>
@@ -127,7 +126,7 @@
                                 <label for="name1" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
                                     <input type="hidden" id="journalId" name ="journalId">
-                                    <select name="intPjtId" class="form-control" id="intPjtId" disabled>
+                                    <select name="intPjtId" class="form-control" id="intPjtId"  >
                                         <option value="-1">Select Project</option>
                                         <?php
                                         foreach ($records as $rec):?>
@@ -157,6 +156,19 @@
                                     <?php echo form_error('name'); ?>
                                 </div>
                             </div>
+                            <div class="form-group" id="selectshow">
+                                <label for="name1" class="col-sm-3 control-label">Journal Category</label>
+                                <div class="col-sm-9">
+                                    <select name="intCatId" class="form-control" id="intCatId">
+                                        <option value="-1">Select Journal Category</option>
+                                        <?php
+                                        foreach ($category as $category):?>
+                                            <option value="<?php echo $category->journal_category_id; ?>"><?php echo $category->journal_category_name; ?> </option>
+                                        <?php  endforeach;?>
+                                    </select>
+                                    <?php echo form_error('name'); ?>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-4 col-md-offset-2"></div>
 
@@ -172,9 +184,10 @@
         </div>
     </div>
 </div>
+
 <script>
     $("#datatables-example").DataTable();
-	$('div.dataTables_filter input').attr('placeholder', 'Enter the text here');
+    $('div.dataTables_filter input').attr('placeholder', 'Enter the text here');
 </script>
 <script>
     $("#projectMaster").addClass("active open");
@@ -216,26 +229,37 @@
             }
 
         });
-        $(".modaldelete").click(function(){
-            if(confirm("Do you want to delete?"))
-            {
-                var id = $(this).attr("data-journalId");
-                $.post( "<?php echo base_url(); ?>journal/delete_journal",{id:id}, function( data ) {
-                    location.reload();
-                });
-            }
-        });
         $(".modaledit").click(function(){
-            var projectId = $(this).attr("data-projectId");
-            var journalId = $(this).attr("data-journalId");
-            var journalName = $(this).attr("data-journalName");
-            var typeId = $(this).attr("data-typeId");
-            $('#intPjtId').val( projectId );
-            $('#strJournal').val( journalName );
-            $('#intJournalType').val( typeId );
-            $('#journalId').val( journalId );
-
+            $('#intCatId').val( $(this).attr("data-category") );
+            if($(this).attr("data-category")==-1){
+                $('#selectshow').hide();
+            }else{
+                $('#selectshow').show();
+            }
+            if($(this).attr("data-status")==1){
+                $('#intPjtId').attr('disabled',true);
+                $('#intJournalType').attr('disabled',true);
+                $('#intCatId').attr('disabled',true);
+            }else{
+                $('#intPjtId').attr('disabled',false);
+                $('#intJournalType').attr('disabled',false);
+                $('#intCatId').attr('disabled',false);
+            }
+            $('#intPjtId').val( $(this).attr("data-projectId") );
+            $('#strJournal').val( $(this).attr("data-journalName") );
+            $('#intJournalType').val( $(this).attr("data-typeId") );
+            $('#journalId').val( $(this).attr("data-journalId") );
         });
+
+    });
+    $( "#intJournalType" ).change(function() {
+        var val=$('#intJournalType').val( );
+        if(val==1){
+            $('#selectshow').show();
+        }else{
+            $('#selectshow').hide();
+            $('#intCatId').val(-1);
+        }
     });
     $('#from_datepicker').daterangepicker({
         singleDatePicker: true,
@@ -245,4 +269,52 @@
         singleDatePicker: true,
         showDropdowns: true
     });
+    $(".modaldelete").click(function(){
+        if(confirm("Do you want to delete?"))
+        {
+            var id = $(this).attr("data-journalId");
+            $.post( "<?php echo base_url(); ?>journal/delete_journal",{id:id}, function( data ) {
+                location.reload();
+            });
+        }
+    });
+   /* $(".modaldelete").click(function(){
+        var id = $(this).attr("data-journalId");
+        swal({
+                title: "Are you sure?",
+                text: "to delete the journal!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete",
+                cancelButtonText: "No, cancel",
+                closeOnConfirm: false,
+                closeOnCancel: false },
+            function(isConfirm){
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url:"<?php echo site_url('ajxjournal/delete_journal'); ?>",
+                        dataType: 'json',
+                        data: {userid: id},
+                        async: false,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status == "success") {
+                                swal("Deleted!", "Journal" +"'"+ data.journal +"'"+ " deleted.", "success");
+                                window.location = data.url;
+                            }
+                        },
+                        failure: function () {
+                            console.log(' Ajax Failure');
+                        },
+                        complete: function () {
+                            console.log("com");
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+    });*/
 </script>

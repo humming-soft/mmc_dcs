@@ -110,7 +110,6 @@ endforeach; ?>
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!--<form method=post id=updaterecord action="<?php /*/*echo base_url(); */?>project/updateProject">-->
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Edit The Project Details</h4>
@@ -164,8 +163,6 @@ endforeach; ?>
                                 </div>
                             </div>
                             <div class="col-md-4 col-md-offset-2"></div>
-
-                        <!-- END Basic Elements -->
                     </div>
                 </div>
             </div>

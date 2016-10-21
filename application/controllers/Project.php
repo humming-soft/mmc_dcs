@@ -65,7 +65,7 @@ class Project extends CI_Controller
             $data = array('pjct_name' => $projrctname, 'pjct_desc' => $this->input->post("strProjectDesc"), 'pjct_from' => date("Y-m-d", strtotime($this->input->post("dateFrom"))), 'pjct_to' => date("Y-m-d", strtotime($this->input->post("dateTo"))), 'cont_name' => $this->input->post("strContractName"), 'has_parking' => $this->input->post("intParking"), 'has_depot' => $this->input->post("intDepot"), 'created_by' => $this->session->userdata('uid'), 'created_date' => date('Y-m-d H:i:s'), 'modified_by' => $this->session->userdata('uid'), 'modified_date' => date('Y-m-d H:i:s'));
             $result = $this->project_Model->project_add($data);
             if ($result == true) {
-                $this->session->set_flashdata('success', $this->input->post("strProjectName") . ' successfully added ');
+                $this->session->set_flashdata('success', $projrctname . ' successfully added ');
                 redirect('project/list_project', 'refresh');
             } else {
                 $this->session->set_flashdata('error', 'project not added.');

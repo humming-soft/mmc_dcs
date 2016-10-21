@@ -110,7 +110,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group">
+                           <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-3 control-label">Depot </label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
@@ -124,7 +124,7 @@
                             <div class="form-group">
                                 <label for="insert" class="col-sm-3 control-label"></label>
                                 <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-block m-b-2 btn-primary" name="insert" id="insert">Save</button>
+                                    <button type="submit"  id="buttonSubmit" class="btn btn-block m-b-2 btn-primary" name="insert" id="insert">Save</button>
                                 </div>
                             </div>
                             <?php echo form_close();?>

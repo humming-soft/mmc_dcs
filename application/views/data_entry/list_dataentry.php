@@ -82,7 +82,7 @@
                             <td class="text-white"><?php echo $journal['journal_name']; ?></td>
                             <td class="text-center v-a-m">
                                 <div class="btn-group" role="group" aria-label="...">
-                                    <a href="" data-toggle="modal" <?php if($journal['journal_type_id']==1){?> data-target="#myModalData" class="modalData" <?php } else { ?> data-target="#myModalImage" class="modalImage" <?php } ?>  data-journalId="<?php echo $journal['journal_master_id']; ?>" data-pjctName="<?php echo $journal['pjct_name']; ?>" data-journalName="<?php echo $journal['journal_name']; ?>" data-journalType="<?php echo $journal['journal_type_name']; ?>" >Update</a>
+                                    <a href="" data-toggle="modal" <?php if($journal['journal_type_id']==1){?> data-target="#myModalData" class="modalData" <?php } else { ?> data-target="#myModalImage" class="modalImage" <?php } ?>  data-journalId="<?php echo $journal['journal_master_id']; ?>" data-pjctName="<?php echo $journal['pjct_name']; ?>" data-journalName="<?php echo $journal['journal_name']; ?>" data-journalType="<?php echo $journal['journal_type_name']; ?>" data-category="<?php echo $journal['journal_category_id']; ?>" >Update</a>
                                 </div>
                             </td>
                         </tr>
@@ -102,7 +102,6 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <?php echo form_open_multipart('dataentry/doupload' , array('id' => 'validations'));?>
-            <!--<form method=post id=updaterecord action="<?php /*/*echo base_url(); */?>project/updateProject">-->
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Image Journal Entry </h4>
@@ -113,6 +112,7 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <input type="hidden"  name="journalimage" id="journalimage">
+
                                 <label for="mobile1" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
                                     <label for="strPjctname" class="control-label" style="color: white" id="strImgPjctname" name="strImgPjctname"></label>
@@ -124,12 +124,6 @@
                                     <label for="strJournalName" class="control-label" style="color: white" id="strImgJournalName" name="strImgJournalName"></label>
                                 </div>
                             </div>
-                           <!-- <div class="form-group">
-                                <label for="mobile1" class="col-sm-3 control-label">Journal Type</label>
-                                <div class="col-sm-9">
-                                    <label for="strJournalType" class=" control-label" style="color: white" id="strImgJournalType" name="strImgJournalType"></label>
-                                </div>
-                            </div>-->
                             <div class="form-group">
                                 <label for="from_datepicker" class="col-sm-3 control-label">Data Date</label>
                                 <div class="col-sm-9">
@@ -138,8 +132,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                               <!-- <?php /*if($error != ''){ echo "<font color='red'>$error</font>";}*/?>
-                                --><?php /* if($success != ''){ echo "<font color='green'>$success</font>"; }*/?>
                                 <label for="mobile1" class="col-sm-3 control-label">Upload Image</label>
                                 <div class="col-sm-1" >
                                      <input type="file" name="userfile[]" class="form-control" id="filer_input" data-jfiler-extensions="jpg,png" multiple="multiple">
@@ -148,8 +140,6 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-md-offset-2"></div>
-
-                        <!-- END Basic Elements -->
                     </div>
                 </div>
             </div>
@@ -165,7 +155,6 @@
 <div class="modal fade" id="myModalData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!--<form method=post id=updaterecord action="<?php /*/*echo base_url(); */?>project/updateProject">-->
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Journal Data Entry </h4>
@@ -177,6 +166,7 @@
                             <?php echo form_open_multipart('dataentry/parse_data', array('id' => 'dataform','class'=>'form-horizontal'));?>
                             <div class="form-group">
                                 <input type="hidden"  name="journalid" id="journalid">
+                                <input type="hidden"  name="categoryId" id="categoryId">
                                 <label for="mobile1" class="col-sm-3 control-label">Project Name</label>
                                 <div class="col-sm-9">
                                     <label for="strPjctname" class="control-label" style="color: white" id="strPjctname" name="strPjctname"></label>
@@ -188,12 +178,6 @@
                                     <label for="strJournalName" class="control-label" style="color: white" id="strJournalName" name="strJournalName"></label>
                                 </div>
                             </div>
-                          <!--  <div class="form-group">
-                                <label for="mobile1" class="col-sm-3 control-label">Journal Type</label>
-                                <div class="col-sm-9">
-                                    <label for="strJournalType" class=" control-label" style="color: white" id="strJournalType" name="strJournalType"></label>
-                                </div>
-                            </div>-->
                             <div class="form-group">
                                 <label for="from_datepicker" class="col-sm-3 control-label">Data Date</label>
                                 <div class="col-sm-9">
@@ -281,11 +265,11 @@
             var projectName = $(this).attr("data-pjctName");
             var journalId = $(this).attr("data-journalId");
             var journalName = $(this).attr("data-journalName");
-           /* var journalType = $(this).attr("data-journalType");*/
+           var category = $(this).attr("data-category");
             $('#journalid').val( journalId );
             $('#strPjctname').text(projectName) ;
             $('#strJournalName').text( journalName );
-           /* $('#strJournalType').text( journalType );*/
+            $('#categoryId').val( category );
 
         });
         $(".modalImage").click(function(){

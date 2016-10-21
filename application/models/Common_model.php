@@ -96,8 +96,6 @@ class Common_model extends CI_Model
         $this->db->set('lastlogin', 'NOW()', FALSE);
         return $this->db->update('users');
     }
-
-
     /**
      * @jane
      * date:13/09/2016
@@ -109,7 +107,6 @@ class Common_model extends CI_Model
     {
         return $this->db->insert('users_log', $data);
     }
-
     /**
      * @jane
      * date:23/09/2016
@@ -117,29 +114,28 @@ class Common_model extends CI_Model
      * Return type:
      * Description: function to log login attempt in db
      */
-    public function parse_data($id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date)
-    {
-        $sql = "INSERT INTO tbl_safety_incident(journal_master_id, incident_date, incident_desc,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$incident_date','$incident_desc','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
-        return $this->db->query($sql);
-    }
+    //KAD
     public function parse_data_kdi($id, $data_date,$kd_desc,$forecast_date,$contract_date,$dps_date, $cre_by, $crea_date, $mod_by, $mod_date)
     {
         $sql = "INSERT INTO tbl_kd_master(journal_master_id, data_date, kd_desc,forecast_date,contract_date,dps_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$data_date','$kd_desc','$forecast_date','$contract_date','$dps_date','$cre_by','$crea_date','$mod_by','$mod_date')";
         return $this->db->query($sql);
     }
+    //KPI
     public function parse_data_kpi($id,$kpi_type,$baseline,$kpi_target,$actual, $data_date, $cre_by, $crea_date, $mod_by, $mod_date)
     {
         $sql = "INSERT INTO tbl_kpi_master(journal_master_id, kpi_type, baseline,kpi_target,actual,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$kpi_type','$baseline','$kpi_target','$actual','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
         return $this->db->query($sql);
     }
-    public function parse_data_safty_incident($id, $incident_date, $incident_desc, $data_date, $cre_by, $crea_date, $mod_by, $mod_date)
-    {
-        $sql = "INSERT INTO tbl_safety_incident(journal_master_id, incident_date, incident_desc,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$incident_date','$incident_desc','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
-        return $this->db->query($sql);
-    }
-    public function parse_data_project_master($id,$prgm_sub_name,$early_prec,$actual_prec,$late_prec,$early_varience,$late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date)
+    //PS_CURVE
+    public function parse_data_prgm_master($id,$prgm_sub_name,$early_prec,$actual_prec,$late_prec,$early_varience,$late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date)
     {
         $sql = "INSERT INTO tbl_prgm_master(journal_master_id, prgm_sub_name, early_prec,actual_prec,late_prec,early_varience,late_varience,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$prgm_sub_name','$early_prec','$actual_prec','$late_prec','$early_varience','$late_varience','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
+    }
+    //VS_CURVE
+    public function parse_project_prgm_master($id, $data_date,$early_prec,$actual_prec,$late_prec,$early_varience,$late_varience,$cre_by, $crea_date, $mod_by, $mod_date)
+    {
+        $sql = "INSERT INTO tbl_project_prgs_master(journal_master_id, early_perc,actual_perc,late_perc,early_variance,late_varience,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$early_prec','$actual_prec','$late_prec','$early_varience','$late_varience','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
         return $this->db->query($sql);
     }
     /**

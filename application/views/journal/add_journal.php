@@ -96,6 +96,19 @@
                                     <?php echo form_error('name'); ?>
                                 </div>
                             </div>
+                            <div class="form-group" id="selectshow">
+                                <label for="name1" class="col-sm-3 control-label">Journal Category</label>
+                                <div class="col-sm-9">
+                                    <select name="intCatId" class="form-control" id="intCatId" hidden="true">
+                                        <option value="-1">Select Journal Category</option>
+                                        <?php
+                                        foreach ($category as $category):?>
+                                            <option value="<?php echo $category->journal_category_id; ?>"><?php echo $category->journal_category_name; ?> </option>
+                                        <?php  endforeach;?>
+                                    </select>
+                                    <?php echo form_error('name'); ?>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="insert" class="col-sm-3 control-label"></label>
                                 <div class="col-sm-2">
@@ -161,7 +174,15 @@
 
         });
     });
-
+    $( "#intJournalType" ).change(function() {
+        var val=$('#intJournalType').val( );
+        if(val==1){
+            $('#selectshow').show();
+        }else{
+            $('#selectshow').hide();
+            $('#intCatId').val(-1);
+        }
+    });
 </script>
 
 <!--<script type="text/javascript">

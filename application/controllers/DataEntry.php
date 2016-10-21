@@ -42,85 +42,107 @@ class Dataentry extends CI_Controller
      * Description: This function is to save the Excel and CSV data in to Database
      */
     public function parse_data(){
-        $parse_array = array();
+            $parse_array = array();
             $file = $_FILES['file']['tmp_name'];
             $parse_array = $this->parse_excel($file);
             $highestRow = $this->get_row($file);
             $id=$this->input->post("journalid");
+            $cetegoryId=$this->input->post("categoryId");
             $data_date=date("Y-m-d", strtotime($this->input->post("datadate")));
             $cre_by = $this->session->userdata('uid');
             $crea_date = date('Y-m-d H:i:s');
             $mod_date = date('Y-m-d H:i:s');
             $mod_by = $this->session->userdata('uid');
-            $row=$this->journal_model->get_journal_name($id);
+            $row=$this->journal_model->get_category_name($cetegoryId);
             foreach ($row as $row):
-                $journalname=$row['journal_name'];
+                $categoryName=$row['journal_category_name'];
             endforeach;
-            switch( strtoupper($journalname)){
-            /*($val['INSTALL_PERCENTAGE'] == null || $val['INSTALL_PERCENTAGE'] == "") ? '' :  $val['INSTALL_PERCENTAGE']."%",*/
-                case "V1 KPI": case "V2 KPI": case "V3 KPI": case "V4 KPI": case "V5 KPI": case "V6 KPI": case "V7 KPI":$i = 2;
-                    while ($i <= $highestRow) {
-                        $kpi_type=(empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
-                        $baseline=(empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1]))? 0.00 :$parse_array[$i][1];
-                        $kpi_target=(empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2]))? 0.00 :$parse_array[$i][2];
-                        $actual=(empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3]))? 0.00 :$parse_array[$i][3];
-                        $res = $this->common_model->parse_data_kpi($id,$kpi_type,$baseline,$kpi_target,$actual, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                        $i++;
-                    }
-                    if($res){
+            if($highestRow>1) {
+                switch (strtoupper($categoryName)) {
+                    case "KPI":
+                        $i = 2;
+                        while ($i <= $highestRow) {
+                            $kpi_type = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                            $baseline = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                            $kpi_target = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                            $actual = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                            $res = $this->common_model->parse_data_kpi($id, $kpi_type, $baseline, $kpi_target, $actual, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                            $i++;
+                        }
+                        if ($res) {
+                            $this->session->set_flashdata('success', 'file is successfully uploaded');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        } else {
+                            $this->session->set_flashdata('error', 'Upload is failed.');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        }
+                        break;
+                    case "KAD":
+                        $i = 2;
+                        while ($i <= $highestRow) {
+                            $kd_desc = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                            $forecast_date = (empty($parse_array[$i][1])) ? "" : date("Y-m-d", strtotime($parse_array[$i][1]));
+                            $contract_date = (empty($parse_array[$i][2])) ? "" : date("Y-m-d", strtotime($parse_array[$i][2]));
+                            $dps_date = (empty($parse_array[$i][3])) ? "" : date("Y-m-d", strtotime($parse_array[$i][2]));
+                            $res = $this->common_model->parse_data_kdi($id, $data_date, $kd_desc, $forecast_date, $contract_date, $dps_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                            $i++;
+                        }
+                        if ($res) {
+                            $this->session->set_flashdata('success', 'file is successfully uploaded');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        } else {
+                            $this->session->set_flashdata('error', 'Upload is failed.');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        }
+                        break;
+                    case "P-SCURVE":
+                        $i = 2;
+                        while ($i <= $highestRow) {
+                            $prgm_sub_name = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                            $early_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                            $actual_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                            $late_prec = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                            $early_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
+                            $late_varience = (empty($parse_array[$i][5]) || !is_numeric($parse_array[$i][5])) ? 0.00 : $parse_array[$i][5];
+                            $res = $this->common_model->parse_data_prgm_master($id, $prgm_sub_name, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                            $i++;
+                        }
+                        if ($res) {
+                            $this->session->set_flashdata('success', 'file is successfully uploaded');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        } else {
+                            $this->session->set_flashdata('error', 'Upload is failed.');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        }
+                        break;
+                    case "V-SCURVE":
+                        $i = 2;
+                        while ($i <= $highestRow) {
+                            $early_prec = (empty($parse_array[$i][0]) || !is_numeric($parse_array[$i][0])) ? 0.00 : $parse_array[$i][0];
+                            $actual_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                            $late_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                            $early_varience = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                            $late_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
+                            $res = $this->common_model->parse_project_prgm_master($id, $data_date, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $cre_by, $crea_date, $mod_by, $mod_date);
+                            $i++;
+                        }
+                        if ($res) {
+                            $this->session->set_flashdata('success', 'file is successfully uploaded');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        } else {
+                            $this->session->set_flashdata('error', 'Upload is failed.');
+                            redirect('dataentry/list_dataentry', 'refresh');
+                        }
+                        break;
+                    default:
+                        $this->session->set_flashdata('error', 'the journal category is wrong!!!!!');
                         redirect('dataentry/list_dataentry', 'refresh');
-                    }else{
-                        redirect('journal/list_journals', 'refresh');
-                    }
-                    break;
-                case "V1 KDI": case "V2 KDI":case "V3 KDI":case "V4 KDI":case "V5 KDI" : case "V6 KDI" : case "V7 KDI":$i = 2;
-                while ($i <= $highestRow) {
-                    $kd_desc=(empty($parse_array[$i][0]))? "" :$parse_array[$i][0];
-                    $forecast_date=(empty($parse_array[$i][1]))? "" :date("Y-m-d", strtotime($parse_array[$i][1]));
-                    $contract_date=(empty($parse_array[$i][2]))? "" :date("Y-m-d", strtotime($parse_array[$i][2]));
-                    $dps_date=(empty($parse_array[$i][3]))? "" :date("Y-m-d", strtotime($parse_array[$i][2]));
-                    $res = $this->common_model->parse_data_kdi($id, $data_date,$kd_desc,$forecast_date,$contract_date,$dps_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                    $i++;
+                        break;
                 }
-                if($res){
-                    redirect('dataentry/list_dataentry', 'refresh');
-                }else{
-                    redirect('journal/list_journals', 'refresh');
-                }
-                break;
-                case "PROGRAM MASTER":$i = 2;
-                while ($i <= $highestRow) {
-                    $prgm_sub_name =(empty($parse_array[$i][0]))? "" :$parse_array[$i][0];
-                    $early_prec=(empty($parse_array[$i][1])|| !is_numeric($parse_array[$i][1]))? 0.00 :$parse_array[$i][1];
-                    $actual_prec=(empty($parse_array[$i][2])|| !is_numeric($parse_array[$i][2]))? 0.00 :$parse_array[$i][2];
-                    $late_prec=(empty($parse_array[$i][3])|| !is_numeric($parse_array[$i][3]))? 0.00 :$parse_array[$i][3];
-                    $early_varience=(empty($parse_array[$i][4])|| !is_numeric($parse_array[$i][4]))? 0.00 :$parse_array[$i][4];
-                    $late_varience=(empty($parse_array[$i][5])|| !is_numeric($parse_array[$i][5]))? 0.00 :$parse_array[$i][5];
-                    $res = $this->common_model->parse_data_project_master($id,$prgm_sub_name,$early_prec,$actual_prec,$late_prec,$early_varience,$late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                    $i++;
-                }
-                if($res){
-                    redirect('dataentry/list_dataentry', 'refresh');
-                }else{
-                    redirect('journal/list_journals', 'refresh');
-                }
-                break;
-                case "V1 SAFTY INCIDENT": case "V2 SAFTY INCIDENT":case "V3 SAFTY INCIDENT":case "V4 SAFTY INCIDENT":case "V5 SAFTY INCIDENT" : case "V6 SAFTY INCIDENT" : case "V7 SAFTY INCIDENT":$i = 1;
-                    while ($i <= $highestRow) {
-                        $incident_date=$parse_array[$i][0];
-                        $incident_desc=$parse_array[$i][1];
-                        $res = $this->common_model->parse_data_safty_incident($id, $data_date,$incident_date,$incident_desc, $cre_by, $crea_date, $mod_by, $mod_date);
-                        $i++;
-                    }
-                    if($res){
-                        redirect('dataentry/list_dataentry', 'refresh');
-                    }else{
-                        redirect('journal/list_journals', 'refresh');
-                    }
-                    break;
-                   default:redirect('journal/list_journals', 'refresh');
-                    break;
-             }
+            }else{
+                $this->session->set_flashdata('error', 'your selected file only contain heading');
+                redirect('dataentry/list_dataentry', 'refresh');
+            }
 
     }
     /**
