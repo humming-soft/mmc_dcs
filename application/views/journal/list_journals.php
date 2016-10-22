@@ -305,7 +305,7 @@
             allowOutsideClick: false,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            cancelButtonColor: '#008000',
             confirmButtonText: 'Yes, delete it!',
             closeOnCancel: false 
         },
