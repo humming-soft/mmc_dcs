@@ -63,7 +63,7 @@
                                             <option value="<?php echo $categ->category_type_id; ?>"><?php echo $categ->category_type_name; ?> </option>
                                         <?php  endforeach;?>
                                     </select>
-                                    <?php echo form_error('name'); ?>
+                                    <?php echo form_error('intCategoryId'); ?>
                                 </div>
                                 </div>
                                 <div class="form-group">
@@ -77,13 +77,13 @@
                                     <label for="name1" class="col-sm-3 control-label">Region</label>
                                     <div class="col-sm-9">
                                         <select name="intRegionId" class="form-control" id="intRegionId">
-                                            <option value="-1">Select Region</option>
+                                            <option value="none" selected="selected">Select Region</option>
                                             <?php
                                             foreach ($region as $region):?>
                                                 <option value="<?php echo $region->region_master_id; ?>"><?php echo $region->region_name; ?> </option>
                                             <?php  endforeach;?>
                                         </select>
-                                        <?php echo form_error('name'); ?>
+                                        <?php echo form_error('intRegionId'); ?>
                                     </div>
                                 </div>
                             <div class="form-group">
@@ -92,7 +92,6 @@
                                     <label class="checkbox-inline">
                                         <input type="checkbox" value="1" name="isActive" id="isActive"> Is Actuve
                                     </label>
-                                    <?php echo form_error('strStationName'); ?>
                                 </div>
                             </div>
                                 <div class="form-group">

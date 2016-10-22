@@ -91,7 +91,7 @@
                     allowOutsideClick: false
                 });
             </script>
-            <?php } ;?>
+            <?php } ;?>a
             <div class="row">
                 <div class="col-lg-12">
                     <table id="datatables-example" class="table table-striped table-bordered">
