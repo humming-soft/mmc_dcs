@@ -7,8 +7,6 @@
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dist/sweetalert.css">
-
-<script src="<?php echo base_url(); ?>assets/javascript/plugins-init.js"></script>
 <!-- end: Javascript for validation-->
 <div class="content">
     <!-- START Sub-Navbar with Header only-->
@@ -93,7 +91,7 @@
                     allowOutsideClick: false
                 });
             </script>
-            <?php } ;?>a
+            <?php } ;?>
             <div class="row">
                 <div class="col-lg-12">
                     <table id="datatables-example" class="table table-striped table-bordered">
@@ -253,7 +251,6 @@
             }
 
         });
-    });
         $(".modaledit").click(function(){
             $('#intCatId').val( $(this).attr("data-category") );
             if($(this).attr("data-category")==-1){
@@ -275,6 +272,8 @@
             $('#intJournalType').val( $(this).attr("data-typeId") );
             $('#journalId').val( $(this).attr("data-journalId") );
         });
+
+    });
     $( "#intJournalType" ).change(function() {
         var val=$('#intJournalType').val( );
         if(val==1){
@@ -306,7 +305,7 @@
             allowOutsideClick: false,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#008000',
+            cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!',
             closeOnCancel: false 
         },
@@ -327,4 +326,43 @@
         }
         );
     });
+   /* $(".modaldelete").click(function(){
+        var id = $(this).attr("data-journalId");
+        swal({
+                title: "Are you sure?",
+                text: "to delete the journal!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete",
+                cancelButtonText: "No, cancel",
+                closeOnConfirm: false,
+                closeOnCancel: false },
+            function(isConfirm){
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url:"<?php echo site_url('ajxjournal/delete_journal'); ?>",
+                        dataType: 'json',
+                        data: {userid: id},
+                        async: false,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status == "success") {
+                                swal("Deleted!", "Journal" +"'"+ data.journal +"'"+ " deleted.", "success");
+                                window.location = data.url;
+                            }
+                        },
+                        failure: function () {
+                            console.log(' Ajax Failure');
+                        },
+                        complete: function () {
+                            console.log("com");
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+        });*/
     </script>
