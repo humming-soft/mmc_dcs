@@ -77,8 +77,8 @@
                         <a href="<?php /*echo base_url('common/validation') */?>">
                             <span class="nav-label">Validation</span>
                         </a>
-                    </li>
-					<li class="" id="imageupload">
+                    </li>-->
+					<!--<li class="" id="imageupload">
                         <a href="<?php /*echo base_url('common/imageupload') */?>">
                             <span class="nav-label">Image Upload</span>
                         </a>

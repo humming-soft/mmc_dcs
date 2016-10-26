@@ -60,40 +60,32 @@
 
     <div class="container">
         <!-- START EDIT CONTENT -->
-        <?php if($this->session->flashdata('success')){ 
-            $success = $this->session->flashdata('success');
-            ?>
-            <!--<div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
+        <!--<div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
                 <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
             </div>-->
+        <?php if($this->session->flashdata('success')){ $success = $this->session->flashdata('success');?>
             <script type="text/javascript">
                 swal({
                     title: 'Success!',
-                    text: '<?php echo $success; ?>',
-                    type: 'success',
+                    text:  '<?php echo $success; ?>',
+                    type:   'success',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
-            <?php } ;?>
-            <?php  if($this->session->flashdata('error')){
-                $error = $this->session->flashdata('error');
-                ?>
-            <!--<div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
-            </div> -->
+        <?php } ;?>
+        <?php  if($this->session->flashdata('error')){$error = $this->session->flashdata('error');?>
             <script type="text/javascript">
                 swal({
-                    title: 'Error!',
-                    text: '<?php echo $error; ?>',
-                    type: 'error',
+                    title: 'Sorry!',
+                    text:  '<?php echo $error; ?>',
+                    type:   'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
-            <?php } ;?>a
+        <?php } ;?>
             <div class="row">
                 <div class="col-lg-12">
                     <table id="datatables-example" class="table table-striped table-bordered">
@@ -294,13 +286,10 @@
     });
     $(".modaldelete").click(function(){
         var id = $(this).attr("data-journalId");
-        var str1 = "Journal ";
         var jname = $(this).attr("data-journalName");
-        var str3 = " is safe :)";
-        var res = str1.concat(jname,str3); 
         swal({
             title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            text: "to delete the journal  '"+ jname +"' ?" ,
             type: "warning",
             allowEscapeKey: false,
             allowOutsideClick: false,
@@ -318,7 +307,7 @@
             } else {
                 swal({
                     title: 'Error!',
-                    text: res,
+                    text: "journal  '"+ jname +" ' is safe :)",
                     type: 'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false

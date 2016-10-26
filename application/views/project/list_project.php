@@ -57,31 +57,28 @@
 
     <div class="container">
         <!-- START EDIT CONTENT -->
-        <?php if($this->session->flashdata('success')){ ?>
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php if($this->session->flashdata('success')){ $success = $this->session->flashdata('success');?>
             <script type="text/javascript">
                 swal({
                     title: 'Success!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $success; ?>',
                     type:   'success',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
         <?php } ;?>
-        <?php  if($this->session->flashdata('error')){ ?>
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php  if($this->session->flashdata('error')){$error = $this->session->flashdata('error');?>
             <script type="text/javascript">
                 swal({
                     title: 'Sorry!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $error; ?>',
                     type:   'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
         <?php } ;?>
-
         <div class="row">
             <div class="col-lg-12">
                 <table id="datatables-example" class="table table-striped table-bordered">
@@ -109,7 +106,7 @@
                                 ?>
                                 <div class="btn-group" role="group" aria-label="...">
                                     <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-projectId="<?php echo $record->pjct_master_id; ?>" data-pjctName="<?php echo $record->pjct_name; ?>" data-pjtFrom="<?php echo $record->pjct_from	; ?>" data-pjtTo="<?php echo $record->pjct_to ; ?>" data-desc="<?php echo $record->pjct_desc ; ?>" data-contract="<?php echo $record->cont_name ; ?>"  data-parking="<?php echo $record->has_parking ; ?>"  data-depot="<?php echo $record->has_depot ; ?>"  ><span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="Update">&nbsp;</span></a>
-                                    <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
+                                    <a href="" data-toggle="modal" class="modaldelete" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>" data-pjctName="<?php echo $record->pjct_name; ?>" ><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
                                     <a href="" data-toggle="modal" data-target="#myModalStation" class="modalAddStation" data-projectId="<?php echo html_escape($record->pjct_master_id); ?>" data-stationDetails="<?php echo $stationdat; ?>"  data-pjctName="<?php echo $record->pjct_name; ?>"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Add Stations">&nbsp;</span></a>
                                 </div>
                             </td>
@@ -306,13 +303,36 @@
     });
 });*/
 $(".modaldelete").click(function(){
-        if(confirm("Do you want to delete?"))
-        {
-            var id = $(this).attr("data-projectId");
-            $.post( "<?php echo base_url(); ?>project/delete_project",{id:id}, function( data ) {
-                location.reload();
-            });
-        }
+        var id = $(this).attr("data-projectId");
+        var pjctName = $(this).attr("data-pjctName");
+            swal({
+                    title: "Are you sure?",
+                    text: "to delete the project  '"+ pjctName +"' ?" ,
+                    type: "warning",
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#008000',
+                    confirmButtonText: 'Yes, delete it!',
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        $.post( "<?php echo base_url(); ?>project/delete_project",{id:id}, function( data ) {
+                        location.reload();
+                    });
+                    } else {
+                        swal({
+                            title: 'Error!',
+                            text: "Project  '"+ pjctName +" ' is safe :)",
+                            type: 'error',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false
+                        });
+                    }
+                }
+            );
     });
 $(".modaledit").click(function(){
             var projectId = $(this).attr("data-projectId");

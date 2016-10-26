@@ -50,24 +50,22 @@
     </div>
     <!-- END Sub-Navbar with Header and Breadcrumbs-->
     <div class="container">
-        <?php if($this->session->flashdata('success')){ ?>
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php if($this->session->flashdata('success')){ $success = $this->session->flashdata('success');?>
             <script type="text/javascript">
                 swal({
                     title: 'Success!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $success; ?>',
                     type:   'success',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
         <?php } ;?>
-        <?php  if($this->session->flashdata('error')){ ?>
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php  if($this->session->flashdata('error')){$error = $this->session->flashdata('error');?>
             <script type="text/javascript">
                 swal({
                     title: 'Sorry!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $error; ?>',
                     type:   'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false
@@ -146,9 +144,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="mobile1" class="col-sm-3 control-label">Upload Image</label>
-                                <div class="col-sm-1" >
+                                <div class="col-sm-9" >
                                      <input type="file" name="userfile[]" class="form-control" id="filer_input" data-jfiler-extensions="jpg,png" multiple="multiple">
-                                     <?php echo form_error('files[]'); ?>
+                                     <?php echo form_error('userfile[]'); ?>
                                 </div>
                             </div>
                         </div>
@@ -230,79 +228,30 @@
     $("#dataEntry").addClass("active open");
 </script>
 <script>
-    $(document).ready(function() {
-        jQuery.validator.addMethod("fullname", function (value, element) {
-            return this.optional(element) || /^[a-z\s]+$/i.test(value);
-        }, "Only alphabetes allowed");
-        $("#validations").validate({
-            rules: {
-                strProjectName: {
-                    minlength: 2,
-                    required: true
-                },
-                dateFrom:{
-                    required: true
-                },
-                dateTo:{
-                    required: true
-                }
-            },
-            messages: {
-                strProjectName: {
-                    required: "Project Name required"
-                },
-                dateFrom: {
-                    required: "Project Start Date is Required  required"
-                },
-                dateTo: {
-                    required: "Project End Date is required"
-                }
-            },
-            errorElement: "span",
-            errorPlacement: function(error, element) {
-                error.appendTo(element.parent());
-                jQuery(element.parent()).addClass('has-error m-b-1'); // to show error on element also
-            }
-
-        });
-        $(".modaldelete").click(function(){
-            if(confirm("Do you want to delete?"))
-            {
-                var id = $(this).attr("data-journalId");
-                $.post( "<?php echo base_url(); ?>journal/delete_journal",{id:id}, function( data ) {
-                    location.reload();
-                });
-            }
-        });
         $(".modalData").click(function(){
             var projectName = $(this).attr("data-pjctName");
             var journalId = $(this).attr("data-journalId");
             var journalName = $(this).attr("data-journalName");
-           var category = $(this).attr("data-category");
+            var category = $(this).attr("data-category");
             $('#journalid').val( journalId );
             $('#strPjctname').text(projectName) ;
             $('#strJournalName').text( journalName );
             $('#categoryId').val( category );
-
         });
         $(".modalImage").click(function(){
             var projectName = $(this).attr("data-pjctName");
             var journalId = $(this).attr("data-journalId");
             var journalName = $(this).attr("data-journalName");
-           /* var journalType = $(this).attr("data-journalType");*/
             $('#journalimage').val( journalId );
             $('#strImgPjctname').text(projectName) ;
             $('#strImgJournalName').text( journalName );
-            /*$('#strImgJournalType').text( journalType );*/
-
         });
-    });
-    $('#data_date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true
-    });
-    $('#image_datepicker').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true
-    });
+        $('#data_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true
+        });
+        $('#image_datepicker').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true
+        });
 </script>

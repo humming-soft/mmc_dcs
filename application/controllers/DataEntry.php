@@ -16,6 +16,7 @@ class Dataentry extends CI_Controller
         $this->load->library('excel');
         date_default_timezone_set('Asia/Calcutta'); // to set the time zone
     }
+
     /**
      * @jane
      * date:15/09/2016
@@ -23,17 +24,21 @@ class Dataentry extends CI_Controller
      * Return type:
      * Description: This function is to show the data entry page
      */
-    public function add_data(){
+    public function add_data()
+    {
         $this->load->view('data_entry/add_data');
         $this->load->view('template/footer');
     }
-    public function list_dataentry(){
+
+    public function list_dataentry()
+    {
         $data['records'] = $this->project_Model->project_get();
         $data['journalType'] = $this->journal_model->journal_type_get();
         $data['journal'] = $this->journal_model->journal_get();
-        $this->load->view('data_entry/list_dataentry',$data);
+        $this->load->view('data_entry/list_dataentry', $data);
         $this->load->view('template/footer');
     }
+
     /**
      * @Ancy
      * date:29/09/2016
@@ -41,110 +46,112 @@ class Dataentry extends CI_Controller
      * Return type:
      * Description: This function is to save the Excel and CSV data in to Database
      */
-    public function parse_data(){
-            $parse_array = array();
-            $file = $_FILES['file']['tmp_name'];
-            $parse_array = $this->parse_excel($file);
-            $highestRow = $this->get_row($file);
-            $id=$this->input->post("journalid");
-            $cetegoryId=$this->input->post("categoryId");
-            $data_date=date("Y-m-d", strtotime($this->input->post("datadate")));
-            $cre_by = $this->session->userdata('uid');
-            $crea_date = date('Y-m-d H:i:s');
-            $mod_date = date('Y-m-d H:i:s');
-            $mod_by = $this->session->userdata('uid');
-            $row=$this->journal_model->get_category_name($cetegoryId);
-            foreach ($row as $row):
-                $categoryName=$row['journal_category_name'];
-            endforeach;
-            if($highestRow>1) {
-                switch (strtoupper($categoryName)) {
-                    case "KPI":
-                        $i = 2;
-                        while ($i <= $highestRow) {
-                            $kpi_type = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
-                            $baseline = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
-                            $kpi_target = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
-                            $actual = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
-                            $res = $this->common_model->parse_data_kpi($id, $kpi_type, $baseline, $kpi_target, $actual, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                            $i++;
-                        }
-                        if ($res) {
-                            $this->session->set_flashdata('success', 'file is successfully uploaded');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'Upload is failed.');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        }
-                        break;
-                    case "KAD":
-                        $i = 2;
-                        while ($i <= $highestRow) {
-                            $kd_desc = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
-                            $forecast_date = (empty($parse_array[$i][1])) ? "" : date("Y-m-d", strtotime($parse_array[$i][1]));
-                            $contract_date = (empty($parse_array[$i][2])) ? "" : date("Y-m-d", strtotime($parse_array[$i][2]));
-                            $dps_date = (empty($parse_array[$i][3])) ? "" : date("Y-m-d", strtotime($parse_array[$i][2]));
-                            $res = $this->common_model->parse_data_kdi($id, $data_date, $kd_desc, $forecast_date, $contract_date, $dps_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                            $i++;
-                        }
-                        if ($res) {
-                            $this->session->set_flashdata('success', 'file is successfully uploaded');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'Upload is failed.');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        }
-                        break;
-                    case "P-SCURVE":
-                        $i = 2;
-                        while ($i <= $highestRow) {
-                            $prgm_sub_name = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
-                            $early_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
-                            $actual_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
-                            $late_prec = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
-                            $early_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
-                            $late_varience = (empty($parse_array[$i][5]) || !is_numeric($parse_array[$i][5])) ? 0.00 : $parse_array[$i][5];
-                            $res = $this->common_model->parse_data_prgm_master($id, $prgm_sub_name, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
-                            $i++;
-                        }
-                        if ($res) {
-                            $this->session->set_flashdata('success', 'file is successfully uploaded');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'Upload is failed.');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        }
-                        break;
-                    case "V-SCURVE":
-                        $i = 2;
-                        while ($i <= $highestRow) {
-                            $early_prec = (empty($parse_array[$i][0]) || !is_numeric($parse_array[$i][0])) ? 0.00 : $parse_array[$i][0];
-                            $actual_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
-                            $late_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
-                            $early_varience = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
-                            $late_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
-                            $res = $this->common_model->parse_project_prgm_master($id, $data_date, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $cre_by, $crea_date, $mod_by, $mod_date);
-                            $i++;
-                        }
-                        if ($res) {
-                            $this->session->set_flashdata('success', 'file is successfully uploaded');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'Upload is failed.');
-                            redirect('dataentry/list_dataentry', 'refresh');
-                        }
-                        break;
-                    default:
-                        $this->session->set_flashdata('error', 'the journal category is wrong!!!!!');
+    public function parse_data()
+    {
+        $parse_array = array();
+        $file = $_FILES['file']['tmp_name'];
+        $parse_array = $this->parse_excel($file);
+        $highestRow = $this->get_row($file);
+        $id = $this->input->post("journalid");
+        $cetegoryId = $this->input->post("categoryId");
+        $data_date = date("Y-m-d", strtotime($this->input->post("datadate")));
+        $cre_by = $this->session->userdata('uid');
+        $crea_date = date('Y-m-d H:i:s');
+        $mod_date = date('Y-m-d H:i:s');
+        $mod_by = $this->session->userdata('uid');
+        $row = $this->journal_model->get_category_name($cetegoryId);
+        foreach ($row as $row):
+            $categoryName = $row['journal_category_name'];
+        endforeach;
+        if ($highestRow > 1) {
+            switch (strtoupper($categoryName)) {
+                case "KPI":
+                    $i = 2;
+                    while ($i <= $highestRow) {
+                        $kpi_type = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $baseline = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                        $kpi_target = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                        $actual = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                        $res = $this->common_model->parse_data_kpi($id, $kpi_type, $baseline, $kpi_target, $actual, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
                         redirect('dataentry/list_dataentry', 'refresh');
-                        break;
-                }
-            }else{
-                $this->session->set_flashdata('error', 'your selected file only contain heading');
-                redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "KAD":
+                    $i = 2;
+                    while ($i <= $highestRow) {
+                        $kd_desc = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $forecast_date = (empty($parse_array[$i][1])) ? "" : date("Y-m-d", strtotime($parse_array[$i][1]));
+                        $contract_date = (empty($parse_array[$i][2])) ? "" : date("Y-m-d", strtotime($parse_array[$i][2]));
+                        $dps_date = (empty($parse_array[$i][3])) ? "" : date("Y-m-d", strtotime($parse_array[$i][2]));
+                        $res = $this->common_model->parse_data_kdi($id, $data_date, $kd_desc, $forecast_date, $contract_date, $dps_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "P-SCURVE":
+                    $i = 2;
+                    while ($i <= $highestRow) {
+                        $prgm_sub_name = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $early_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                        $actual_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                        $late_prec = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                        $early_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
+                        $late_varience = (empty($parse_array[$i][5]) || !is_numeric($parse_array[$i][5])) ? 0.00 : $parse_array[$i][5];
+                        $res = $this->common_model->parse_data_prgm_master($id, $prgm_sub_name, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "V-SCURVE":
+                    $i = 2;
+                    while ($i <= $highestRow) {
+                        $early_prec = (empty($parse_array[$i][0]) || !is_numeric($parse_array[$i][0])) ? 0.00 : $parse_array[$i][0];
+                        $actual_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                        $late_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                        $early_varience = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                        $late_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
+                        $res = $this->common_model->parse_project_prgm_master($id, $data_date, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                default:
+                    $this->session->set_flashdata('error', 'the journal category is wrong!!!!!');
+                    redirect('dataentry/list_dataentry', 'refresh');
+                    break;
             }
+        } else {
+            $this->session->set_flashdata('error', 'your selected file only contain heading');
+            redirect('dataentry/list_dataentry', 'refresh');
+        }
 
     }
+
     /**
      * @Ancy
      * date:29/09/2016
@@ -152,11 +159,13 @@ class Dataentry extends CI_Controller
      * Return type:
      * Description: This function is to get number of rows in the file
      */
-    public function get_row($file){
+    public function get_row($file)
+    {
         $objPHPExcel = PHPExcel_IOFactory::load($file);
         $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
         return $highestRow;
     }
+
     /**
      * @Ancy
      * date:29/09/2016
@@ -164,7 +173,8 @@ class Dataentry extends CI_Controller
      * Return type:
      * Description: This function is to get file records
      */
-    public function parse_excel($file){
+    public function parse_excel($file)
+    {
         $objPHPExcel = PHPExcel_IOFactory::load($file);
         $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
         PHPExcel_Shared_Date::ExcelToPHP($dateValue = 0, $adjustToTimezone = FALSE, $timezone = NULL);
@@ -174,87 +184,110 @@ class Dataentry extends CI_Controller
         $val = array();
         for ($row = 1; $row <= $highestRow; ++$row) {
             for ($col = 0; $col < $highestColumnIndex; ++$col) {
-                $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col,$row);
-                if(PHPExcel_Shared_Date::isDateTime($cell)) {
-                    $InvDate= $cell->getValue();
+                $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col, $row);
+                if (PHPExcel_Shared_Date::isDateTime($cell)) {
+                    $InvDate = $cell->getValue();
                     $cellVal = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($InvDate));
+                } else {
+                    $cellVal = $cell->getValue();
                 }
-                else{
-                    $cellVal=$cell->getValue();
-                }
-               /* $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col, $row)->getValue();*/
+                /* $cell = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($col, $row)->getValue();*/
                 $val[$row][$col] = $cellVal;
-        }
+            }
         }
         return $val;
     }
 
-    public function doupload() {
-        $this->load->library('upload');
-        $files = $_FILES;
-        $cpt = count($_FILES['userfile']['name']);
-        $id=$this->input->post("journalimage");
-        $data_date=date("Y-m-d", strtotime($this->input->post("datadateImage")));
-        $userid = $this->session->userdata('uid');
-        $row=$this->project_Model->get_project_name($id);
-        foreach ($row as $row):
-            $projectname=trim($row['pjct_name']);
-        endforeach;
-        $chk=0;
-        $count=0;
-        for($i=0; $i<$cpt; $i++)
+    public function doupload()
+    {
+        $this->load->helper(array('form'));
+        $this->load->library('form_validation');
+        if (empty($_FILES['userfile']['name']))
         {
-            $_FILES['userfile']['name']= $files['userfile']['name'][$i];
-            $_FILES['userfile']['type']= $files['userfile']['type'][$i];
-            $_FILES['userfile']['tmp_name']= $files['userfile']['tmp_name'][$i];
-            $_FILES['userfile']['error']= $files['userfile']['error'][$i];
-            $_FILES['userfile']['size']= $files['userfile']['size'][$i];
-            $array = explode('_', $_FILES['userfile']['name']);
-            if(sizeof($array)==3){
-                $project = (empty($array[0])) ? "" : strtoupper(trim($array[0]));
-                $array2 = explode('.',$array[2]);
-                $description = (empty($array2[0])) ? "" : $array2[0];
-                if (strlen(substr($array[1], 0, 2)) == 2 && strlen(substr($array[1], 2, 2)) == 2 && strlen(substr($array[1], 4, 4)) == 4 && is_numeric(substr($array[1], 0, 2)) && is_numeric(substr($array[1], 2, 2)) && is_numeric(substr($array[1], 4, 4))) {
-                    $uploaddate = (empty($array[1])) ? "" : date("Y-m-d", strtotime(substr($array[1], 0, 2) . '-' . substr($array[1], 2, 2) . '-' . substr($array[1], 4, 4)));
+            $this->session->set_flashdata('error', 'You could not select any picture.');
+            redirect('dataentry/list_dataentry', 'refresh');
+        }
+        else
+        {
+            $this->load->library('upload');
+            $files = $_FILES;
+            $cpt = count($_FILES['userfile']['name']);
+            $id = $this->input->post("journalimage");
+            $data_date = date("Y-m-d", strtotime($this->input->post("datadateImage")));
+            $userid = $this->session->userdata('uid');
+            $row = $this->project_Model->get_project_name($id);
+            foreach ($row as $row):
+                $projectname = trim($row['pjct_name']);
+            endforeach;
+            $chk = 0;
+            $er = 0;
+            $count = 0;
+            for ($i = 0; $i < $cpt; $i++) {
+                $_FILES['userfile']['name'] = $files['userfile']['name'][$i];
+                $_FILES['userfile']['type'] = $files['userfile']['type'][$i];
+                $_FILES['userfile']['tmp_name'] = $files['userfile']['tmp_name'][$i];
+                $_FILES['userfile']['error'] = $files['userfile']['error'][$i];
+                $_FILES['userfile']['size'] = $files['userfile']['size'][$i];
+                $array = explode('_', $_FILES['userfile']['name']);
+                $root = $_SERVER['DOCUMENT_ROOT'];
+
+                if (sizeof($array) == 3) {
+                    $project = (empty($array[0])) ? "" : strtoupper(trim($array[0]));
+                    $array2 = explode('.', $array[2]);
+                    $description = (empty($array2[0])) ? "" : $array2[0];
+                    if (strlen(substr($array[1], 0, 2)) == 2 && strlen(substr($array[1], 2, 2)) == 2 && strlen(substr($array[1], 4, 4)) == 4 && is_numeric(substr($array[1], 0, 2)) && is_numeric(substr($array[1], 2, 2)) && is_numeric(substr($array[1], 4, 4))) {
+                        $uploaddate = (empty($array[1])) ? "" : date("Y-m-d", strtotime(substr($array[1], 0, 2) . '-' . substr($array[1], 2, 2) . '-' . substr($array[1], 4, 4)));
+                    } else {
+                        $uploaddate = "";
+                    }
                 } else {
+                    $project = "";
+                    $description = "";
                     $uploaddate = "";
                 }
-            }else{
-                $project="";
-                $description="";
-                $uploaddate="";
-            }
-            // check whether there is a folder in the document root if not create
-            if (!is_dir('gallery')) {
-                mkdir('./gallery', 0777, true);
-            }
-            if (!is_dir('gallery/'.$id)) {
-                mkdir('./gallery/'.$id, 0777, true);
-            }
-            if (!is_dir('gallery/'.$id.'/'.$data_date)) {
-                mkdir('./gallery/'.$id.'/'.$data_date, 0777, true);
-            }
-            $config['upload_path'] = 'gallery/'.$id.'/'.$data_date.'/';
-            $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size']      = '0';
-            $config['overwrite']     = FALSE;
-            $this->upload->initialize($config);
-            if(strcasecmp($projectname,$project)==0){
-                if($this->upload->do_upload()){
-                    $filedetails=$this->upload->data();
-                    $data = array('journal_master_id' => $id,'image_name' => $filedetails['file_name'],'image_path' => $filedetails['file_path'],'image_desc'=>$description,'image_upload_date'=>$uploaddate,'data_date' =>$data_date,'crea_date' => date('Y-m-d H:i:s'),'mod_date' => date('Y-m-d H:i:s'),'cre_by'=>$userid,'mod_by'=>$userid);
-                    $this->common_model->image_upload($data);
-                    $count++;
-                    $chk=1;
+                // check whether there is a folder in the document root if not create
+                if (!is_dir($root . '/' . 'gallery')) {
+                    mkdir($root . '/' . 'gallery', 0777, true);
+                }
+                // check whether there is a folder for album inside the gallery if not create
+                if (!is_dir($root . '/' . 'gallery' . '/' . $id)) {
+                    mkdir($root . '/' . 'gallery' . '/' . $id, 0777, true);
+                }
+                // check whether there is a folder for date inside the album if not create
+                if (!is_dir($root . '/' . 'gallery' . '/' . $id . '/' . $data_date)) {
+                    mkdir($root . '/' . 'gallery' . '/' . $id . '/' . $data_date, 0777, true);
+                }
+                $config['upload_path'] = $root . '/' . 'gallery' . '/' . $id . '/' . $data_date;
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['max_size'] = '0';
+                $config['overwrite'] = FALSE;
+                $this->upload->initialize($config);
+                if (strcasecmp($projectname, $project) == 0) {
+                    if ($this->upload->do_upload()) {
+                        $filedetails = $this->upload->data();
+                        $data = array('journal_master_id' => $id, 'image_name' => $filedetails['file_name'], 'image_path' => $filedetails['file_path'], 'image_desc' => $description, 'image_upload_date' => $uploaddate, 'data_date' => $data_date, 'crea_date' => date('Y-m-d H:i:s'), 'mod_date' => date('Y-m-d H:i:s'), 'cre_by' => $userid, 'mod_by' => $userid);
+                        $this->common_model->image_upload($data);
+                        $count++;
+                        $chk = 1;
+                    }
+                } else {
+                    $er = 1;
                 }
             }
-        }
-        if($chk==1){
-            $this->session->set_flashdata('success', $count."  picture(s) attached with journal.");
-            redirect('dataentry/list_dataentry', 'refresh');
-        }else{
-            $this->session->set_flashdata('error', 'Picture not uploaded.');
-            redirect('dataentry/list_dataentry', 'refresh');
+            if ($chk == 1 && $er == 1) {
+                $total = $cpt - $count;
+                $this->session->set_flashdata('success', $count . "  picture(s) attached with journal and " . $total . " pictures do not match with journal .");
+                redirect('dataentry/list_dataentry', 'refresh');
+            } else if ($count == $cpt && $chk == 1) {
+                $this->session->set_flashdata('success', $count . "  picture(s) attached with journal.");
+                redirect('dataentry/list_dataentry', 'refresh');
+            } else if ($er == 1 && $chk == 0) {
+                $this->session->set_flashdata('error', "picture(s) not uploaded bcoz, Picture do not match with journal .");
+                redirect('dataentry/list_dataentry', 'refresh');
+            } else {
+                $this->session->set_flashdata('error', 'Picture(s) not uploaded.');
+                redirect('dataentry/list_dataentry', 'refresh');
+            }
         }
     }
 }

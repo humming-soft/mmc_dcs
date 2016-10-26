@@ -23,9 +23,9 @@
 <!-- end: Javascript for validation
 
 <!-- Fileupload Scripts -->
-<!--<script src="<?php /*echo base_url(); */?>assets/plugins/jqueryfiler/js/jquery.filer.min.js" type="text/javascript"></script>
-<script src="<?php /*echo base_url(); */?>assets/plugins/jqueryfiler/js/custom.js" type="text/javascript"></script>-->
-<!-- Toastr Js -->
+<script src="<?php echo base_url(); ?>assets/plugins/jqueryfiler/js/jquery.filer.min.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/jqueryfiler/js/custom.js" type="text/javascript"></script>
+--><!-- Toastr Js -->
 <!--<script src="<?php /*echo base_url(); */?>assets/plugins/toastr/toastr.min.js" type="text/javascript"></script>-->
 <script type="text/javascript">
     // Hide loader

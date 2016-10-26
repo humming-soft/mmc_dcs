@@ -139,7 +139,7 @@
                 <img class="initial-loader-logo" src="<?php echo base_url(); ?>assets/images/spin-logo-inverted.png"
                 alt="Loader">
 
-                <div class="loader loader--style1">
+                <!--<div class="loader loader--style1">
                             <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg"
                                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px"
                                  viewbox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
@@ -151,7 +151,7 @@
 
                     </g>
                 </svg>
-            </div>
+            </div>-->
         </div>
         <div class="initial-loader-bottom">
             Loading. Please Wait. <i class="fa fa-cricle" style="opacity: 0"></i>

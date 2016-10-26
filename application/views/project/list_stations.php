@@ -58,38 +58,27 @@
 
     <div class="container">
         <!-- START EDIT CONTENT -->
-        <?php if($this->session->flashdata('success')){ ?>
-            <!--<div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
-            </div>-->
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php if($this->session->flashdata('success')){ $success = $this->session->flashdata('success');?>
             <script type="text/javascript">
                 swal({
                     title: 'Success!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $success; ?>',
                     type:   'success',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
         <?php } ;?>
-        <?php  if($this->session->flashdata('error')){ ?>
-            <!-- <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php /*echo $this->session->flashdata('error'); */?>.</span>
-            </div>-->
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php  if($this->session->flashdata('error')){$error = $this->session->flashdata('error');?>
             <script type="text/javascript">
                 swal({
                     title: 'Sorry!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $error; ?>',
                     type:   'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
-
         <?php } ;?>
         <div class="row">
             <div class="col-lg-12">
@@ -114,7 +103,7 @@
                             <td class="text-center v-a-m">
                                 <div class="btn-group" role="group" aria-label="...">
                                     <a href="" data-toggle="modal" data-target="#myModal1" class="modaledit" data-stationId="<?php echo $record['station_master_id']; ?>" data-categoryId="<?php echo $record['category_type_id']; ?>" data-stationName="<?php echo $record['spd_name']; ?>" data-region="<?php echo $record['region_master_id'] ; ?>" data-isActive="<?php echo $record['is_active'] ; ?>"  ><span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="Update">&nbsp;</span></a>
-                                    <a href="" data-toggle="modal" class="modaldelete" data-stationId="<?php echo html_escape($record['station_master_id']); ?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
+                                    <a href="" data-toggle="modal" class="modaldelete" data-stationId="<?php echo html_escape($record['station_master_id']); ?>" data-stationName="<?php echo $record['spd_name']; ?>" ><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete">&nbsp;</span></a>
                                 </div>
                             </td>
                         </tr>
@@ -249,14 +238,38 @@
         });
 
     });
-    */    $(".modaldelete").click(function(){
-            if(confirm("Do you want to delete?"))
-            {
+    */
+    $(".modaldelete").click(function(){
                 var id = $(this).attr("data-stationId");
-                $.post( "<?php echo base_url(); ?>project/delete_station",{id:id}, function( data ) {
-                    location.reload();
-                });
-            }
+                var station = $(this).attr("data-stationName");
+                swal({
+                    title: "Are you sure?",
+                    text: "to delete the station  '"+ station +"' ?" ,
+                    type: "warning",
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#008000',
+                    confirmButtonText: 'Yes, delete it!',
+                    closeOnCancel: false
+                 },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            $.post( "<?php echo base_url(); ?>project/delete_station",{id:id}, function( data ) {
+                            location.reload();
+                        });
+                        } else {
+                            swal({
+                                title: 'Error!',
+                                text: "Station  '"+ station +" ' is safe :)",
+                                type: 'error',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                        }
+                    }
+                );
         });
         $(".modaledit").click(function(){
             var stationId = $(this).attr("data-stationId");

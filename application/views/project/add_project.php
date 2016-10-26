@@ -44,24 +44,22 @@
 
 
     <div class="container">
-        <?php if($this->session->flashdata('success')){ ?>
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php if($this->session->flashdata('success')){ $success = $this->session->flashdata('success');?>
             <script type="text/javascript">
                 swal({
                     title: 'Success!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $success; ?>',
                     type:   'success',
                     allowEscapeKey: false,
                     allowOutsideClick: false
                 });
             </script>
         <?php } ;?>
-        <?php  if($this->session->flashdata('error')){ ?>
-            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+        <?php  if($this->session->flashdata('error')){$error = $this->session->flashdata('error');?>
             <script type="text/javascript">
                 swal({
                     title: 'Sorry!',
-                    text:  document.getElementById("message").value+ '.',
+                    text:  '<?php echo $error; ?>',
                     type:   'error',
                     allowEscapeKey: false,
                     allowOutsideClick: false
