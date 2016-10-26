@@ -15,19 +15,18 @@
 <!-- Bower Libraries Scripts -->
 <script src="<?php echo base_url(); ?>assets/vendor/js/lib.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/app.min.8c5687ed.js"></script>
-<script src="<?php echo base_url(); ?>assets/javascript/plugins-init.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/switchery-settings.js"></script>
 
 <!-- start: Javascript for validation-->
-<script src="<?php echo base_url(); ?>assets/jquery/jquery.validate.js"></script>
-<script src="<?php echo base_url(); ?>assets/jquery/additional-methods.min.js"></script>
-<!-- end: Javascript for validation-->
+<!--<script src="<?php /*echo base_url(); */?>assets/jquery/jquery.validate.js"></script>
+<script src="<?php /*echo base_url(); */?>assets/jquery/additional-methods.min.js"></script>-->
+<!-- end: Javascript for validation
 
 <!-- Fileupload Scripts -->
-<script src="<?php echo base_url(); ?>assets/plugins/jqueryfiler/js/jquery.filer.min.js" type="text/javascript"></script>
-<script src="<?php echo base_url(); ?>assets/plugins/jqueryfiler/js/custom.js" type="text/javascript"></script>
+<!--<script src="<?php /*echo base_url(); */?>assets/plugins/jqueryfiler/js/jquery.filer.min.js" type="text/javascript"></script>
+<script src="<?php /*echo base_url(); */?>assets/plugins/jqueryfiler/js/custom.js" type="text/javascript"></script>-->
 <!-- Toastr Js -->
-<script src="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.js" type="text/javascript"></script>
+<!--<script src="<?php /*echo base_url(); */?>assets/plugins/toastr/toastr.min.js" type="text/javascript"></script>-->
 <script type="text/javascript">
     // Hide loader
     $( document ).ready(function() {

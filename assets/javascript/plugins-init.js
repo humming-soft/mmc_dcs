@@ -1,7 +1,7 @@
 //Init Peity in Sidebar Avatar
-$(function() {
+/*$(function() {
     $("#sidebar-avatar-chart").peity("bar");
-});
+});*/
 
 //Init DataTables
 //Dashboard.Helpers.elementExists('#datatables-example', function() {
@@ -12,7 +12,9 @@ $(function() {
 //        .addClass('table table-striped table-bordered');
 //});
 //Init Peity charts
+/*
 $(".data-attributes span").peity("donut");
+*/
 
 // Init select2
 (function() {

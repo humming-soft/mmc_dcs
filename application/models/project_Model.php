@@ -28,6 +28,7 @@ class project_Model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('tbl_project_master');
+        $this->db->order_by('pjct_master_id', 'asc');
         $query = $this->db->get();
         $result = $query->result();
         return $result;

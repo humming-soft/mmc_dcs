@@ -1,10 +1,12 @@
 <!-- start: Javascript for validation-->
-<script src="<?php echo base_url(); ?>assets/jquery/jquery.min.js"></script>
+<script src="<?php /*echo base_url(); */?>assets/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/dataTables.bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
+<script src="<?php echo base_url(); ?>assets/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dist/sweetalert.css">
 <!-- end: Javascript for validation-->
 
 <div class="content">
@@ -56,17 +58,30 @@
     <div class="container">
         <!-- START EDIT CONTENT -->
         <?php if($this->session->flashdata('success')){ ?>
-            <div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
-            </div>
+            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+            <script type="text/javascript">
+                swal({
+                    title: 'Success!',
+                    text:  document.getElementById("message").value+ '.',
+                    type:   'success',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            </script>
         <?php } ;?>
         <?php  if($this->session->flashdata('error')){ ?>
-            <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
-            </div>
+            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+            <script type="text/javascript">
+                swal({
+                    title: 'Sorry!',
+                    text:  document.getElementById("message").value+ '.',
+                    type:   'error',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            </script>
         <?php } ;?>
+
         <div class="row">
             <div class="col-lg-12">
                 <table id="datatables-example" class="table table-striped table-bordered">
@@ -254,10 +269,10 @@
     $("#subProject").addClass("active open");
 </script>
 <script>
-$(document).ready(function() {
-    jQuery.validator.addMethod("fullname", function (value, element) {
+/*$(document).ready(function() {
+   *//* jQuery.validator.addMethod("fullname", function (value, element) {
         return this.optional(element) || /^[a-z\s]+$/i.test(value);
-    }, "Only alphabetes allowed");
+    }, "Only alphabetes allowed");*//*
     $("#validations").validate({
         rules: {
             strProjectName: {
@@ -289,7 +304,7 @@ $(document).ready(function() {
         }
 
     });
-});
+});*/
 $(".modaldelete").click(function(){
         if(confirm("Do you want to delete?"))
         {
@@ -351,8 +366,7 @@ $(".modaledit").click(function(){
         showDropdowns: true
     });
 </script>
-<script src="<?php echo base_url(); ?>assets/vendor/js/lib.min.js"></script>
+
 <script src="<?php echo base_url(); ?>assets/vendor/js/select2.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/bootstrap-select.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/javascript/app.min.8c5687ed.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/plugins-init.js"></script>

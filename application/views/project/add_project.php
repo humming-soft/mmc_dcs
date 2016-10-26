@@ -1,4 +1,5 @@
-
+<script src="<?php echo base_url(); ?>assets/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dist/sweetalert.css">
 <div class="content">
     <!-- START Sub-Navbar with Header only-->
     <div class="sub-navbar sub-navbar__header">
@@ -43,18 +44,29 @@
 
 
     <div class="container">
-        <!-- START EDIT CONTENT -->
         <?php if($this->session->flashdata('success')){ ?>
-            <div class="alert no-bg b-l-success b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Suscess!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('success'); ?>.</span>
-            </div>
+            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+            <script type="text/javascript">
+                swal({
+                    title: 'Success!',
+                    text:  document.getElementById("message").value+ '.',
+                    type:   'success',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            </script>
         <?php } ;?>
         <?php  if($this->session->flashdata('error')){ ?>
-            <div class="alert no-bg b-l-warning b-l-3 b-t-gray b-r-gray b-b-gray" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
-                <strong class="text-white">Faild!</strong> <span class="text-gray-lighter"><?php echo $this->session->flashdata('error'); ?>.</span>
-            </div>
+            <input type="hidden" id="message" value="<?php echo $this->session->flashdata('success')?>">
+            <script type="text/javascript">
+                swal({
+                    title: 'Sorry!',
+                    text:  document.getElementById("message").value+ '.',
+                    type:   'error',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            </script>
         <?php } ;?>
         <div class="row">
             <div class="col-lg-12">
@@ -65,42 +77,42 @@
                         <div class="form-horizontal">
                             <?php echo form_open('project/add_new_project' , array('id' => 'validations'));?>
                             <div class="form-group">
-                                <label for="project_name" class="col-sm-3 control-label">Project Name</label>
+                                <label for="project_name" class="col-sm-3 control-label">Project Name<span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="project_name" name="strProjectName">
                                     <?php echo form_error('strProjectName'); ?>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="project_name" class="col-sm-3 control-label">Description</label>
+                                <label for="project_name" class="col-sm-3 control-label">Description<span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="strProjectDesc" name="strProjectDesc">
                                     <?php echo form_error('strProjectDesc'); ?>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="project_name" class="col-sm-3 control-label">Cotractor name</label>
+                                <label for="project_name" class="col-sm-3 control-label">Cotractor name<span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="strContractName" name="strContractName">
                                     <?php echo form_error('strProjectDesc'); ?>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="from_datepicker" class="col-sm-3 control-label">From</label>
+                                <label for="from_datepicker" class="col-sm-3 control-label">From<span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control"  id="from_datepicker" name="dateFrom">
                                     <?php echo form_error('dateFrom'); ?>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="to_datepicker" class="col-sm-3 control-label">To</label>
+                                <label for="to_datepicker" class="col-sm-3 control-label">To<span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control"  id="to_datepicker" name="dateTo">
                                     <?php echo form_error('dateTo'); ?>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Parking </label>
+                                <label for="inputEmail3" class="col-sm-3 control-label">Parking <span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
                                         <input type="radio" name="intParking" value="1"> Yes
@@ -111,7 +123,7 @@
                                 </div>
                             </div>
                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Depot </label>
+                                <label for="inputEmail3" class="col-sm-3 control-label">Depot <span class="text-danger">*</span> </label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
                                         <input type="radio" name="intDepot" value="1">Yes
@@ -139,8 +151,6 @@
         <!-- END EDIT CONTENT -->
     </div>
 </div>
-
-
 <script src="<?php echo base_url(); ?>assets/vendor/js/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
@@ -189,7 +199,6 @@
                 error.appendTo(element.parent());
                 jQuery(element.parent()).addClass('has-error m-b-1'); // to show error on element also
             }
-
         });
     });
     $('#from_datepicker').daterangepicker({

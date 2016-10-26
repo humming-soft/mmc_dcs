@@ -1,4 +1,5 @@
-
+<script src="<?php echo base_url(); ?>assets/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dist/sweetalert.css">
 <div class="content">
     <!-- START Sub-Navbar with Header only-->
     <div class="sub-navbar sub-navbar__header">
@@ -112,59 +113,14 @@
             <!-- END EDIT CONTENT -->
         </div>
     </div>
-
-
 <script src="<?php echo base_url(); ?>assets/vendor/js/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/vendor/js/daterangepicker.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/javascript/date-range-picker-settings.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/jquery-validation/dist/jquery.validate.min.js'/>"></script>
+
 <script>
     $("#projectMaster").addClass("active open");
     $("#stations").addClass("active open");
-</script>
-<script>
-    $(document).ready(function() {
-        jQuery.validator.addMethod("fullname", function (value, element) {
-            return this.optional(element) || /^[a-z\s]+$/i.test(value);
-        }, "Only alphabetes allowed");
-        $("#validations").validate({
-            rules: {
-                strProjectName: {
-                    minlength: 2,
-                    required: true
-                },
-                strProjectDesc: {
-                    minlength: 2,
-                    required: true
-                },
-                dateFrom:{
-                    required: true
-                },
-                dateTo:{
-                    required: true
-                }
-            },
-            messages: {
-                strProjectName: {
-                    required: "Project Name required"
-                },
-                strProjectDesc: {
-                    required: "Project Description is required"
-                },
-                dateFrom: {
-                    required: "Project Start Date is Required  required"
-                },
-                dateTo: {
-                    required: "Project End Date is required"
-                }
-            },
-            errorElement: "span",
-            errorPlacement: function(error, element) {
-                error.appendTo(element.parent());
-                jQuery(element.parent()).addClass('has-error m-b-1'); // to show error on element also
-            }
-
-        });
-    });
     $('#from_datepicker').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true
@@ -174,23 +130,68 @@
         showDropdowns: true
     });
 </script>
-<!--<script>
-    // Hide loader
-    (function() {
-        var bodyElement = document.querySelector('body');
-        bodyElement.classList.add('loading');
-
-        document.addEventListener('readystatechange', function() {
-            if(document.readyState === 'complete') {
-                var bodyElement = document.querySelector('body');
-                var loaderElement = document.querySelector('#initial-loader');
-
-                bodyElement.classList.add('loaded');
-                setTimeout(function() {
-                    bodyElement.removeChild(loaderElement);
-                    bodyElement.classList.remove('loading', 'loaded');
-                }, 200);
+<script>
+    $(document).ready(function() {
+        $("#validations").validate({
+            errorElement: "span", // contain the error msg in a span tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.col-sm-9').children('div').children().last());
+                } else if (element.attr("name") == "intDd" || element.attr("name") == "intMm" || element.attr("name") == "intYyyy") {
+                    error.insertAfter($(element).closest('.col-sm-9').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            rules: {
+                intCategoryId: {
+                    required: true
+                },
+                strStationName: {
+                    minlength: 2,
+                    required: true
+                },
+                intRegionId:{
+                    required: true
+                }
+            },
+            messages: {
+                intCategoryId: {
+                    required: "Project Name required"
+                },
+                strStationName: {
+                    required: "Station name is required"
+                },
+                intRegionId: {
+                    required: "Project Start Date is Required  required"
+                }
+            },
+            errorElement: "span",
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler1.hide();
+                errorHandler1.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.col-sm-9').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.col-sm-9').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.col-sm-9').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                errorHandler1.hide();
+                $("#validations").submit();
             }
         });
-    })();
-</script>-->
+    });
+</script>
