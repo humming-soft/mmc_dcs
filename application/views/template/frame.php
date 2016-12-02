@@ -53,21 +53,21 @@
                     <i class="fa fa-check-square-o fa-fw fa-lg"></i><span class="nav-label">Project</span><i class="fa arrow"></i>
                 </a>
                 <ul>
-                    <li class="" id="subProject">
-                        <a href="<?php echo base_url('project/list_project') ?>">
+                   <!-- <li class="" id="subProject">
+                        <a href="<?php /*echo base_url('project/list_project') */?>">
                             <span class="nav-label">Project</span>
                         </a>
-                    </li>
-                    <li class="" id="subJournal">
-                        <a href="<?php echo base_url('journal/list_journals') ?>">
+                    </li>-->
+                   <!-- <li class="" id="subJournal">
+                        <a href="<?php /*echo base_url('journal/list_journals') */?>">
                             <span class="nav-label">Journals</span>
                         </a>
                     </li>
                     <li class="" id="stations">
-                        <a href="<?php echo base_url('project/list_stations') ?>">
+                        <a href="<?php /*echo base_url('project/list_stations') */?>">
                             <span class="nav-label">Stations</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li class="" id="dataEntry">
                         <a href="<?php echo base_url('dataentry/list_dataentry') ?>">
                             <span class="nav-label">Data Entry</span>
