@@ -30,28 +30,28 @@
         <!-- START Tree Sidebar Common -->
         <ul class="side-menu">
 
-            <li class="Dashboards">
+            <!--<li class="Dashboards">
                 <a href="#" title="Dashboards">
                     <i class="fa fa-check-square-o fa-fw fa-lg"></i><span class="nav-label">Master</span><i class="fa arrow"></i>
                 </a>
                 <ul>
                     <li class="">
-                        <a href="<?php echo base_url('common/form1') ?>">
+                        <a href="<?php /*echo base_url('common/form1') */?>">
                             <span class="nav-label">User</span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="<?php echo base_url('common/form2') ?>">
+                        <a href="<?php /*echo base_url('common/form2') */?>">
                             <span class="nav-label">Role</span>
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li>-->
 
             <li class="Dashboards">
-                <a href="#" title="Dashboards" id="projectMaster">
+                <!--<a href="#" title="Dashboards" id="projectMaster">
                     <i class="fa fa-check-square-o fa-fw fa-lg"></i><span class="nav-label">Project</span><i class="fa arrow"></i>
-                </a>
+                </a>-->
                 <ul>
                    <!-- <li class="" id="subProject">
                         <a href="<?php /*echo base_url('project/list_project') */?>">

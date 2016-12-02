@@ -53,7 +53,7 @@ class Login extends CI_Controller
                     'usergroup' => $result["user_group"]
                     //"allowed_page" => json_encode($this->dashboard_model->menuPermissionBySlugAndPage($result["user_group"]))
                 ));
-                redirect(base_url('common'), 'refresh');
+                redirect(base_url('dataentry/list_dataentry'), 'refresh');
             } else {
 				//$data['msg'] = '<div class="alert alert-danger" role="alert"><i class="fa fa-fw fa-close text-danger m-r-1"></i><strong>Oh Snap!</strong>Change a few things up and try submitting again.</div>';
                 $data['msg'] = '<div class="alert no-bg b-l-danger b-l-3 b-t-gray b-r-gray b-b-gray" role="alert"><strong class="text-white">Oh Snap! </strong><span class="text-gray-lighter">Change a few things up and try submitting again.</span></div>';
