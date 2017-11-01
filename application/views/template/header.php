@@ -136,7 +136,7 @@
     <div id="initial-loader">
         <div>
             <div class="initial-loader-top">
-                <img class="initial-loader-logo" src="<?php echo base_url(); ?>assets/images/spin-logo-inverted.png"
+                <img class="initial-loader-logo" src="<?php echo base_url(); ?>assets/images/logos/spin-logo-inverted-1.png"
                 alt="Loader">
 
                 <!--<div class="loader loader--style1">
@@ -167,8 +167,8 @@
 
                 <div class="navbar-header">
                     <a class="current navbar-brand" href="#">
-                        <img alt="Spin Logo Inverted" class="h-20"
-                        src="<?php echo base_url(); ?>assets/images/spin-logo-inverted-%402X.png">
+                        <img alt="PADU" class="h-20"
+                        src="<?php echo base_url(); ?>assets/images/spin-logo-inverted-1.png">
                     </a>
                     <button class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
                         <i class="fa fa-fw fa-user text-white"></i>

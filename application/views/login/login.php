@@ -65,11 +65,11 @@
                 <div class="col-md-4 col-md-offset-4">
                     <div class="panel panel-default b-a-2 no-bg b-gray-dark">
                         <div class="panel-heading text-center">
-                            <a href="<?php echo base_url('login/logout')?>"> <img src="<?php echo base_url(); ?>assets/images/spin-logo-inverted-%402X.png" alt="Logo" class="m-t-3 m-b-3 h-20"></a>
-                        </div>
+                            <!--<a href="<?php /*echo base_url('login/logout')*/?>"> <img src="<?php /*echo base_url(); */?>assets/images/logos/spin-logo-inverted-1.png" alt="Logo" class="m-t-3 m-b-3 h-20"></a>
+                        --></div>
                         <div class="panel-body">
                             <h2 class="text-center f-w-300 m-b-0"> Login</h2>
-                            <p class="text-center m-b-3">MMC Gamuda data entry site, Sign in to your account.</p>
+                            <p class="text-center m-b-3">PADU data entry site, Sign in to your account.</p>
                             <?php echo form_open('login/login' , array('id' => 'loginform'));?>
                             <div class="form-group">
                                 <label for="username"></label>

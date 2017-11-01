@@ -138,6 +138,75 @@ class Common_model extends CI_Model
         $sql = "INSERT INTO tbl_project_prgs_master(journal_master_id, early_perc,actual_perc,late_perc,early_variance,late_varience,data_date,cre_by,crea_date,mod_by,mod_date) VALUES('$id','$early_prec','$actual_prec','$late_prec','$early_varience','$late_varience','$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
         return $this->db->query($sql);
     }
+    
+    public function parse_data_upcoming($id, $task, $duration, $start_date, $end_date,$dps_date, $cre_by, $crea_date, $mod_by, $mod_date)
+    {
+
+        $sql = "INSERT INTO tbl_upcoming_task(journal_master_id, up_task, duration, start_date, end_date, data_date, cre_by, crea_date, mod_by, mod_date) VALUES ($id, '$task', '$duration', '$start_date', '$end_date', '$dps_date','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
+    }
+    public function parse_data_late($id, $task, $duration, $start_date, $end_date,$dps_date, $cre_by, $crea_date, $mod_by, $mod_date)
+    {
+
+        $sql = "INSERT INTO tbl_late_task(journal_master_id, late_task, duration, start_date, end_date, data_date, cre_by, crea_date, mod_by, mod_date) VALUES ($id, '$task', '$duration', '$start_date', '$end_date', '$dps_date','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
+    }
+    public function parse_data_issue($id, $date, $issue,$data_date, $cre_by, $crea_date, $mod_by, $mod_date)
+    {
+
+        $sql = "INSERT INTO tbl_issue_mitigation(journal_master_id, issue_date, mitigation, data_date,cre_by, crea_date, mod_by, mod_date) VALUES ($id, '$date', '$issue', '$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
+    }
+    public function parse_progress_cost($id,$bal_value,$earned_value,$data_date, $cre_by, $crea_date, $mod_by, $mod_date)
+    {
+        $sql = "INSERT INTO tbl_progress_cost(journal_master_id,balance_value, earned_value, data_date,cre_by, crea_date, mod_by, mod_date) VALUES ($id, '$bal_value', '$earned_value', '$data_date','$cre_by','$crea_date','$mod_by','$mod_date')";
+        return $this->db->query($sql);
+    }
+
+    function count_upcoming_id($dps_date){
+        $this->db->from('tbl_upcoming_task');
+        $this->db->where('data_date', $dps_date);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function count_late_id($dps_date){
+        $this->db->from('tbl_late_task');
+        $this->db->where('data_date', $dps_date);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function upcoming_delete($dps_date){
+        $this->db->where('data_date', $dps_date);
+        $this->db->delete('tbl_upcoming_task');
+    }
+    function late_delete($dps_date){
+        $this->db->where('data_date', $dps_date);
+        $this->db->delete('tbl_late_task');
+    }
+    function count_issue_id($dps_date){
+        $this->db->from('tbl_issue_mitigation');
+        $this->db->where('data_date', $dps_date);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function issue_delete($dps_date){
+        $this->db->where('data_date', $dps_date);
+        $this->db->delete('tbl_issue_mitigation');
+    }
+    function progress_cost($dps_date){
+        $this->db->from('tbl_progress_cost');
+        $this->db->where('data_date', $dps_date);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        return $rowcount;
+    }
+    function progress_cost_delete($dps_date){
+        $this->db->where('data_date', $dps_date);
+        $this->db->delete('tbl_progress_cost');
+    }
     /**
      * @AgailE
      * date:18/09/2016

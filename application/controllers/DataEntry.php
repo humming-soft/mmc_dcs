@@ -54,7 +54,8 @@ class Dataentry extends CI_Controller
         $highestRow = $this->get_row($file);
         $id = $this->input->post("journalid");
         $cetegoryId = $this->input->post("categoryId");
-        $data_date = date("Y-m-d", strtotime($this->input->post("datadate")));
+        //$data_date = date("Y-m-d ", strtotime($this->input->post("datadate")));
+        $data_date = date("Y-m-d ", strtotime($this->input->post("datadate")));
         $cre_by = $this->session->userdata('uid');
         $crea_date = date('Y-m-d H:i:s');
         $mod_date = date('Y-m-d H:i:s');
@@ -140,6 +141,115 @@ class Dataentry extends CI_Controller
                         redirect('dataentry/list_dataentry', 'refresh');
                     }
                     break;
+                case "UP-TASK":
+                    $i = 2;
+                    $count=0;
+                    $row = $this->common_model->count_upcoming_id($data_date);
+                    if($row > 0){
+                        $this->common_model->upcoming_delete($data_date);
+                    }
+                    while ($i <= $highestRow) {
+                        $task = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $duration = (empty($parse_array[$i][1])) ? "" : $parse_array[$i][1];
+                        $start_date = (empty($parse_array[$i][2])) ? "" : $parse_array[$i][2];
+                        $end_date = (empty($parse_array[$i][3])) ? "" : $parse_array[$i][3];
+                        $res = $this->common_model->parse_data_upcoming($id, $task, $duration, $start_date, $end_date, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                        $count++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded  '.$count.' Rows Inserted');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "LATE-TASK":
+                    $i = 2;
+                    $count=0;
+                    $row = $this->common_model->count_late_id($data_date);
+                    if($row > 0){
+                        $this->common_model->late_delete($data_date);
+                    }
+                    while ($i <= $highestRow) {
+                        $task = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $duration = (empty($parse_array[$i][3])) ? "" : $parse_array[$i][3];
+                        $start_date = (empty($parse_array[$i][1])) ? "" : $parse_array[$i][1];
+                        $end_date = (empty($parse_array[$i][2])) ? "" : $parse_array[$i][2];
+                        $res = $this->common_model->parse_data_late($id, $task, $duration, $start_date, $end_date, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                        $count++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded  '.$count.' Rows Inserted');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "COST":
+                    $i = 2;
+                    $row = $this->common_model->progress_cost($data_date);
+                    if($row > 0){
+                        $this->common_model->progress_cost_delete($data_date);
+                    }
+                    while ($i <= $highestRow) {
+                        $bal_value = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $earned_value = (empty($parse_array[$i][1])) ? "" : $parse_array[$i][1];
+                        $res = $this->common_model->parse_progress_cost($id,$bal_value,$earned_value, $data_date,$cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "ISSUE":
+                    $row = $this->common_model->count_issue_id($data_date);
+                    if($row > 0){
+                        $this->common_model->issue_delete($data_date);
+                    }
+                    $i = 2;
+                    while ($i <= $highestRow) {
+                        $date = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $issue = (empty($parse_array[$i][1])) ? "" : $parse_array[$i][1];
+                        $res = $this->common_model->parse_data_issue($id, $date, $issue,$data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+                case "PADU-SCURVE":
+                    $i = 2;
+                    while ($i <= $highestRow) {
+                        $prgm_sub_name = (empty($parse_array[$i][0])) ? "" : $parse_array[$i][0];
+                        $early_prec = (empty($parse_array[$i][1]) || !is_numeric($parse_array[$i][1])) ? 0.00 : $parse_array[$i][1];
+                        $actual_prec = (empty($parse_array[$i][2]) || !is_numeric($parse_array[$i][2])) ? 0.00 : $parse_array[$i][2];
+                        $late_prec = (empty($parse_array[$i][3]) || !is_numeric($parse_array[$i][3])) ? 0.00 : $parse_array[$i][3];
+                        $early_varience = (empty($parse_array[$i][4]) || !is_numeric($parse_array[$i][4])) ? 0.00 : $parse_array[$i][4];
+                        $late_varience = (empty($parse_array[$i][5]) || !is_numeric($parse_array[$i][5])) ? 0.00 : $parse_array[$i][5];
+                        $res = $this->common_model->parse_data_prgm_master($id, $prgm_sub_name, $early_prec, $actual_prec, $late_prec, $early_varience, $late_varience, $data_date, $cre_by, $crea_date, $mod_by, $mod_date);
+                        $i++;
+                    }
+                    if ($res) {
+                        $this->session->set_flashdata('success', 'file is successfully uploaded');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Upload is failed.');
+                        redirect('dataentry/list_dataentry', 'refresh');
+                    }
+                    break;
+
                 default:
                     $this->session->set_flashdata('error', 'the journal category is wrong!!!!!');
                     redirect('dataentry/list_dataentry', 'refresh');

@@ -31,7 +31,8 @@ class journal_model extends CI_Model {
     }
     function journal_get()
     {
-        $query=$this->db->query("SELECT a.journal_master_id, a.pjct_master_id, a.journal_name, a.journal_type_id,a.journal_category_id,a.journal_status,b.journal_type_name,c.pjct_name FROM tbl_journal_master a,tbl_journal_type b,tbl_project_master c where a.journal_type_id=b.journal_type_id and a.pjct_master_id=c.pjct_master_id order by a.journal_master_id");
+       // $query=$this->db->query("SELECT a.journal_master_id, a.pjct_master_id, a.journal_name, a.journal_type_id,a.journal_category_id,a.journal_status,b.journal_type_name,c.pjct_name FROM tbl_journal_master a,tbl_journal_type b,tbl_project_master c where a.journal_type_id=b.journal_type_id and a.pjct_master_id=c.pjct_master_id order by a.journal_master_id");
+        $query=$this->db->query("SELECT a.journal_master_id, a.pjct_master_id, a.journal_name, a.journal_type_id,a.journal_category_id,b.journal_type_name,c.pjct_name FROM tbl_journal_master a,tbl_journal_type b,tbl_project_master c where a.journal_type_id=b.journal_type_id and a.pjct_master_id=c.pjct_master_id order by a.journal_master_id");
         $results= $query->result_array();
         return $results;
     }
